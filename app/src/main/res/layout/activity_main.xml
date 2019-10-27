@@ -8,10 +8,11 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"
+    android:weightSum="100"
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/menu"
+        android:id="@+id/main_menu"
         android:layout_width="40dp"
         android:layout_height="30dp"
         android:layout_gravity="center"
@@ -25,12 +26,14 @@
     <ImageView
         android:id="@+id/weather_feed_image"
         android:layout_width="match_parent"
-        android:layout_height="298dp"
+        android:layout_height="0dp"
+        android:layout_weight="30"
         android:adjustViewBounds="false"
+        android:onClick="startSettings"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@id/weather_status"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
@@ -121,7 +124,8 @@
     <TextView
         android:id="@+id/weather_status"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="47dp"
+        android:layout_weight="1"
         android:background="#659BFF"
         android:font="@font/roboto_regular"
         android:paddingVertical="5dp"
@@ -154,6 +158,7 @@
         android:id="@+id/menu_wrapper"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="70"
         android:background="#5F718C"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -164,20 +169,22 @@
         <TextView
             android:id="@+id/menu_title"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_gravity="center"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
+            android:layout_weight="5"
             android:text="You May Want"
             android:textColor="#FFFFFF"
-            android:textSize="30sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             app:fontFamily="@font/roboto_regular" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="20"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -268,19 +275,20 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="40dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="10"
             android:background="#8AB5CAFA"
+            android:gravity="center_horizontal"
             android:orientation="horizontal"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="20dp">
+            android:paddingVertical="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginRight="15dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -289,7 +297,7 @@
                     android:layout_height="wrap_content"
                     android:text="Wind"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -298,15 +306,14 @@
                     android:layout_height="wrap_content"
                     android:text="11W Km/h"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="15dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -315,7 +322,7 @@
                     android:layout_height="wrap_content"
                     android:text="Wind-Gust"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -324,15 +331,14 @@
                     android:layout_height="wrap_content"
                     android:text="17 Km/h"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="15dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -341,7 +347,7 @@
                     android:layout_height="wrap_content"
                     android:text="Humidity"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -350,14 +356,14 @@
                     android:layout_height="wrap_content"
                     android:text="50%"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginRight="15dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -366,7 +372,7 @@
                     android:layout_height="wrap_content"
                     android:text="Rain"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -375,7 +381,7 @@
                     android:layout_height="wrap_content"
                     android:text="15mm"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
