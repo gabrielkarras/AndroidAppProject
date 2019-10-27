@@ -1,0 +1,52 @@
+<!--
+  ~ Copyright 2018 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreferenceCompat
+        app:key="daily_notifications"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"
+        app:defaultValue="true"
+        app:disableDependentsState="true"
+        app:title="Enable Daily Recommendations"
+        app:summary="Get daily notifications at your rising time."
+        />
+    <SwitchPreferenceCompat
+        app:key="only_drastic"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"
+        app:defaultValue="false"
+        app:dependency="daily_notifications"
+        app:title="Only Drastic Changes"
+        app:summary="Get notifications only in case of alerts or drastic weather changes."/>
+
+    <SwitchPreferenceCompat
+        app:key="own_catalog_chosen"
+        app:defaultValue="false"
+        app:disableDependentsState="true"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"
+        app:title="Use personal Catalog"
+        app:summary="Get suggestions based on the clothes in your catalog."/>
+    <SwitchPreferenceCompat
+        app:key="allow_comfort_check"
+        app:allowDividerAbove="true"
+        app:title="Allow comfort checks"
+        app:summary="Without your feedback the suggestions are as good as guessing."/>
+
+</PreferenceScreen>
