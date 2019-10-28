@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:orientation="vertical"
-    tools:context=".my_tags">
+    tools:context=".TagsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

@@ -5,23 +5,30 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.view.View;
+import android.view.MenuItem;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
     private Controller controller;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        controller = new Controller(getApplicationContext(),this);
+
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
-        controller = new Controller();
-
+        ((Button)findViewById(R.id.main_menu)).setOnClickListener(controller.menu_pop);
     }
 
-    public void startSettings(View view){
-        Intent settings = new Intent(getApplicationContext(),SettingsActivity.class);
-        startActivity(settings);
+    public void startActivity(Class<?> T){
+        Intent activity = new Intent(getApplicationContext(),T);
+        startActivity(activity);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        controller.handleOnItemSelected(item);
+        return true;
     }
 }
 

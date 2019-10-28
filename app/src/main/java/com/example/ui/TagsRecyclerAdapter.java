@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapter.MyViewHolder> {
     private ArrayList<TagObj> TagDataset;
+    private Controller controller;
     private Context context;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -35,9 +36,10 @@ public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapte
         }
     }
 
-    public TagsRecyclerAdapter(ArrayList<TagObj> myDataset, Context context) {
+    public TagsRecyclerAdapter(ArrayList<TagObj> myDataset, Context context, Controller controller) {
         TagDataset = myDataset;
         this.context = context;
+        this.controller = controller;
     }
 
     // Create new views (invoked by the layout manager)
@@ -48,6 +50,7 @@ public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapte
         MyViewHolder vh = new MyViewHolder(v);
         return vh;
     }
+
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
@@ -80,17 +83,13 @@ public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapte
                     ((CheckBox)v).setSelected(true);
                 } else {
                     TagDataset.get(elementPosition).selected = false;
+
                     ((CheckBox)v).setSelected(false);
                 }
             }
         });
 
-        holder.label.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e("WUUUT","Open Popup for "+((TextView)v).getText());
-            }
-        });
+        holder.label.setOnClickListener(controller.tag_settings_dialog);
 
     }
 

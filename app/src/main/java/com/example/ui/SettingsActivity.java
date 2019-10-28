@@ -1,15 +1,20 @@
 package com.example.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class SettingsActivity extends AppCompatActivity {
+    private Controller controller;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
+        controller = new Controller(getApplicationContext(),this);
 
         // Use the created toolbar as the app action bar and set it's title
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -27,6 +32,22 @@ public class SettingsActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.settings, new MySettingsFragment())
                 .commit();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        controller.handleOnItemSelected(item);
+        return true;
+    }
+
+    public void startActivity(Class<?> T){
+        Intent activity = new Intent(getApplicationContext(),T);
+        startActivity(activity);
+    }
+
+
+    public void terminate(){
+        this.finish();
     }
 
 
