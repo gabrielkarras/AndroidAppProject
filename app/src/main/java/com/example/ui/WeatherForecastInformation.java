@@ -5,6 +5,10 @@ public class WeatherForecastInformation {
     {
         COLD, CHILLING, WARM;
     }
+    public enum WeatherCondition
+    {
+        SUNNY, RAIN, SNOW;
+    }
     private double Maxtemp;
     private double Mintemp;
     private double AvgTemp;
@@ -15,11 +19,34 @@ public class WeatherForecastInformation {
     private double WindGustSpeed;
     private double RainTotal;
     private double SnowTotal;
+    private WeatherCondition WeatherCondition;
+    private String WeatherConditionPhrase;
     private boolean IsGonnaRain;
     private boolean IsGonnaSnow;
     public String[] ColdWeatherItems = {"Winter Coat", "Winter Boots", "Gloves"};
     public String[] ChillingWeatherItems = {"Jacket", "Warm Shoes", "Scarf"};
     public String[] WarmWeatherItems = {"T-shirt", "Light Shoes", "Shorts"};
+
+    public WeatherForecastInformation.WeatherCondition getWeatherCondition() {
+        return WeatherCondition;
+    }
+
+    public void setWeatherCondition(int weatherCondition) {
+        if (weatherCondition < 12)
+            WeatherCondition = WeatherCondition.SUNNY;
+        else if (weatherCondition < 22)
+            WeatherCondition = WeatherCondition.RAIN;
+        else
+            WeatherCondition = WeatherCondition.SNOW;
+    }
+
+    public String getWeatherConditionPhrase() {
+        return WeatherConditionPhrase;
+    }
+
+    public void setWeatherConditionPhrase(String weatherConditionPhrase) {
+        WeatherConditionPhrase = weatherConditionPhrase;
+    }
 
     public double getRainTotal() {
         return RainTotal;

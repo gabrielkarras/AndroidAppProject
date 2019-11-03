@@ -3,6 +3,7 @@ package com.example.ui;
 import android.content.Context;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +30,8 @@ public class WeatherController {
     private TextView critical_parameter2_desc;
     private TextView critical_parameter3_desc;
     private TextView critical_parameter4_desc;
+    private TextView weather_status;
+    private ImageView weather_status_icon;
     private AppCompatActivity caller_activity;
     private Context context;
 
@@ -71,6 +74,8 @@ public class WeatherController {
         critical_parameter3_desc = caller_activity.findViewById(R.id.critical_parameter3_desc);
         critical_parameter4_desc = caller_activity.findViewById(R.id.critical_parameter4_desc);
 
+        weather_status = caller_activity.findViewById(R.id.weather_status);
+        weather_status_icon = caller_activity.findViewById(R.id.weather_status_icon);
     }
 
     private void displayColdWeatherItems()
@@ -126,5 +131,16 @@ public class WeatherController {
         critical_parameter2_desc.setText(WeatherForecast.getWindGustSpeed() + WindUnit);
         critical_parameter3_desc.setText(WeatherForecast.getSnowTotal() + LiquidUnit);
         critical_parameter4_desc.setText(WeatherForecast.getRainTotal() + LiquidUnit);
+
+        weather_status.setText(WeatherForecast.getWeatherConditionPhrase());
+
+        WeatherForecastInformation.WeatherCondition temp2 = WeatherForecast.getWeatherCondition();
+
+        if (temp2 == WeatherForecastInformation.WeatherCondition.SUNNY)
+            weather_status_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.wether_partly_cloudy));
+        else if (temp2 == WeatherForecastInformation.WeatherCondition.RAIN)
+            weather_status_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icons8_stormy_weather_75));
+        else if (temp2 == WeatherForecastInformation.WeatherCondition.SNOW)
+            weather_status_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icons8_snow_storm_75));
     }
 }

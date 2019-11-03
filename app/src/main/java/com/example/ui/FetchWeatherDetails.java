@@ -67,6 +67,10 @@ public class FetchWeatherDetails extends AsyncTask<URL, Void, String> {
                         .getJSONObject("Rain").getDouble("Value");
                 double SnowTotal = results.getJSONObject(0).getJSONObject("Day")
                         .getJSONObject("Snow").getDouble("Value");
+                int WeatherCondition = results.getJSONObject(0).getJSONObject("Day")
+                        .getInt("Icon");
+                String WeatherConditionPhrase = results.getJSONObject(0).getJSONObject("Day")
+                        .getString("IconPhrase");
                 int RainProbability = results.getJSONObject(0).getJSONObject("Day")
                         .getInt("RainProbability");
                 int SnowProbability = results.getJSONObject(0).getJSONObject("Day")
@@ -82,6 +86,8 @@ public class FetchWeatherDetails extends AsyncTask<URL, Void, String> {
                 weatherInfo.setSnowTotal(SnowTotal);
                 weatherInfo.setGonnaRain(RainProbability);
                 weatherInfo.setGonnaSnow(SnowProbability);
+                weatherInfo.setWeatherCondition(WeatherCondition);
+                weatherInfo.setWeatherConditionPhrase(WeatherConditionPhrase);
                 return weatherInfo;
 
             } catch (JSONException e) {
