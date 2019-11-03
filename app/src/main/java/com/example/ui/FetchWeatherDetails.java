@@ -55,6 +55,18 @@ public class FetchWeatherDetails extends AsyncTask<URL, Void, String> {
                                 .getJSONObject("Maximum").getDouble("Value");
                 double MinTemp = results.getJSONObject(0).getJSONObject("RealFeelTemperature")
                         .getJSONObject("Minimum").getDouble("Value");
+                double DecimalMaxTemp = results.getJSONObject(0).getJSONObject("Temperature")
+                        .getJSONObject("Maximum").getDouble("Value");
+                double DecimalMinTemp = results.getJSONObject(0).getJSONObject("Temperature")
+                        .getJSONObject("Minimum").getDouble("Value");
+                double Wind = results.getJSONObject(0).getJSONObject("Day")
+                        .getJSONObject("Wind").getJSONObject("Speed").getDouble("Value");
+                double WindGust = results.getJSONObject(0).getJSONObject("Day")
+                        .getJSONObject("WindGust").getJSONObject("Speed").getDouble("Value");
+                double RainTotal = results.getJSONObject(0).getJSONObject("Day")
+                        .getJSONObject("Rain").getDouble("Value");
+                double SnowTotal = results.getJSONObject(0).getJSONObject("Day")
+                        .getJSONObject("Snow").getDouble("Value");
                 int RainProbability = results.getJSONObject(0).getJSONObject("Day")
                         .getInt("RainProbability");
                 int SnowProbability = results.getJSONObject(0).getJSONObject("Day")
@@ -62,6 +74,12 @@ public class FetchWeatherDetails extends AsyncTask<URL, Void, String> {
 
                 weatherInfo.setMaxtemp(MaxTemp);
                 weatherInfo.setMintemp(MinTemp);
+                weatherInfo.setDecimalMaxtemp(DecimalMaxTemp);
+                weatherInfo.setDecimalMintemp(DecimalMinTemp);
+                weatherInfo.setWindSpeed(Wind);
+                weatherInfo.setWindGustSpeed(WindGust);
+                weatherInfo.setRainTotal(RainTotal);
+                weatherInfo.setSnowTotal(SnowTotal);
                 weatherInfo.setGonnaRain(RainProbability);
                 weatherInfo.setGonnaSnow(SnowProbability);
                 return weatherInfo;

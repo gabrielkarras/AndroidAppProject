@@ -73,7 +73,7 @@
             android:layout_weight="3"
             android:text="12°C"
             android:textColor="#FFA200"
-            android:textSize="48sp"
+            android:textSize="40sp"
             android:textStyle="bold"
             android:typeface="normal"
             app:fontFamily="@font/roboto_regular" />
@@ -102,7 +102,7 @@
             android:layout_weight="5"
             android:text="10"
             android:textColor="#FFFFFF"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:typeface="normal"
             app:fontFamily="@font/roboto_regular" />
@@ -347,7 +347,7 @@
                     android:id="@+id/critical_parameter3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Humidity"
+                    android:text="Snow"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -356,7 +356,7 @@
                     android:id="@+id/critical_parameter3_desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="50%"
+                    android:text="10 mm"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"
                     android:textStyle="bold" />

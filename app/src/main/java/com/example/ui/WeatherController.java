@@ -2,6 +2,7 @@ package com.example.ui;
 
 import android.content.Context;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +11,10 @@ import androidx.core.content.ContextCompat;
 import java.net.URL;
 
 public class WeatherController {
+    private final String Celcius = " °C";
+    private final String Farenheit = " °F";
+    private final String WindUnit = " Mph";
+    private final String LiquidUnit = " inch";
     private FetchWeatherDetails WeatherDetails;
     private WeatherForecastInformation WeatherForecast;
     private Button button1;
@@ -18,6 +23,12 @@ public class WeatherController {
     private TextView textField1;
     private TextView textField2;
     private TextView textField3;
+    private TextView degrees_main;
+    private TextView felt_degress;
+    private TextView critical_parameter1_desc;
+    private TextView critical_parameter2_desc;
+    private TextView critical_parameter3_desc;
+    private TextView critical_parameter4_desc;
     private AppCompatActivity caller_activity;
     private Context context;
 
@@ -52,6 +63,14 @@ public class WeatherController {
         textField1 = caller_activity.findViewById(R.id.sug1_title);
         textField2 = caller_activity.findViewById(R.id.sug2_title);
         textField3 = caller_activity.findViewById(R.id.sug3_title);
+
+        degrees_main = caller_activity.findViewById(R.id.degrees_main);
+        felt_degress = caller_activity.findViewById(R.id.felt_degress);
+        critical_parameter1_desc = caller_activity.findViewById(R.id.critical_parameter1_desc);
+        critical_parameter2_desc = caller_activity.findViewById(R.id.critical_parameter2_desc);
+        critical_parameter3_desc = caller_activity.findViewById(R.id.critical_parameter3_desc);
+        critical_parameter4_desc = caller_activity.findViewById(R.id.critical_parameter4_desc);
+
     }
 
     private void displayColdWeatherItems()
@@ -101,5 +120,11 @@ public class WeatherController {
             displayWarmWeatherItems();
 
 
+        degrees_main.setText((WeatherForecast.getDecimalAvgTemp() + Farenheit));
+        felt_degress.setText(String.valueOf(WeatherForecast.getAvgTemp()));
+        critical_parameter1_desc.setText(WeatherForecast.getWindSpeed() + WindUnit);
+        critical_parameter2_desc.setText(WeatherForecast.getWindGustSpeed() + WindUnit);
+        critical_parameter3_desc.setText(WeatherForecast.getSnowTotal() + LiquidUnit);
+        critical_parameter4_desc.setText(WeatherForecast.getRainTotal() + LiquidUnit);
     }
 }
