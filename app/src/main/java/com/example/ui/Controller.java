@@ -7,9 +7,12 @@ import android.widget.PopupMenu;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.net.URL;
+
 public class Controller {
     private Context context;
     private AppCompatActivity caller_activity;
+
 
     public Controller(Context context, AppCompatActivity caller){
         this.context = context;
@@ -73,6 +76,5 @@ public class Controller {
             createTag.show(caller_activity.getSupportFragmentManager(),"create tag");
         }
     }
-
 
 }

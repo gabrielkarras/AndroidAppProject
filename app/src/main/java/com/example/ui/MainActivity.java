@@ -10,6 +10,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
     private Controller controller;
+    private WeatherController WeatherController;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
         ((Button)findViewById(R.id.main_menu)).setOnClickListener(controller.menu_pop);
+        WeatherController = new WeatherController(getApplicationContext(),this);
+        WeatherController.displayWeatherInformation();
     }
 
     public void startActivity(Class<?> T){

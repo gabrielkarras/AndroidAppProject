@@ -23,3 +23,4 @@ public class TagSettingsDialogFragment extends DialogFragment {
         return view;
     }
 }
+
