@@ -1,25 +1,37 @@
 package com.example.ui;
 
-public class TagObj {
-    private String name;
-    private int tagID;
+import java.io.Serializable;
 
-    private boolean buzzerEnabled = true;
-    private String status = "Unreachable";
+public class TagObj implements Serializable{
+
+    private String name;
+    private long tagID;
+    private boolean buzzerEnabled;
+    private String status;
+
     public boolean alarm = false;
     public boolean selected = false;
 
-    public TagObj (String name, int ID, boolean buzzerEnabled){
+    public TagObj (String name, long ID, boolean buzzerEnabled){
         this.name = name;
         this.tagID = ID;
         this.buzzerEnabled = buzzerEnabled;
+        status = "Unreachable";
+
+    }
+
+    public TagObj (String name, long ID, boolean buzzerEnabled, String status){
+        this.name = name;
+        this.tagID = ID;
+        this.buzzerEnabled = buzzerEnabled;
+        this.status = status;
     }
 
     public String getName(){
         return name;
     }
 
-    public int getTagID() {
+    public long getTagID() {
         return tagID;
     }
 
@@ -27,9 +39,9 @@ public class TagObj {
         return buzzerEnabled;
     }
 
-    public void updateFields(String name, int ID, boolean buzzerEnabled){
+    public void updateFields(String name, boolean buzzerEnabled, String status ){
         this.name = name;
-        this.tagID = ID;
+        this.status = status;
         this.buzzerEnabled = buzzerEnabled;
     }
 
@@ -40,4 +52,6 @@ public class TagObj {
     public String getStatus() {
         return status;
     }
+
+
 }

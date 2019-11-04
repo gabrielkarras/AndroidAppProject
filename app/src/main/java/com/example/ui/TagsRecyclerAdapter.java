@@ -42,12 +42,15 @@ public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapte
         this.controller = controller;
     }
 
+
+
     // Create new views (invoked by the layout manager)
     @Override
     public TagsRecyclerAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.taglist_item_layout, parent, false);
         MyViewHolder vh = new MyViewHolder(v);
+        v.setTag(vh);
         return vh;
     }
 
@@ -57,40 +60,21 @@ public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        final int pos = position;
         holder.label.setText(TagDataset.get(position).getName());
 
-        final int elementPosition = holder.getAdapterPosition();
+        holder.alarmTrigger.setTag(TagDataset.get(position));
+        holder.selected.setTag(TagDataset.get(position));
 
-        holder.alarmTrigger.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(TagDataset.get(elementPosition).alarm == false){
-                    TagDataset.get(elementPosition).alarm = true;
-                    ((ImageButton)v).setForeground(ContextCompat.getDrawable(context, R.drawable.ringing_alarm));
-                } else {
-                    TagDataset.get(elementPosition).alarm = false;
-                    ((ImageButton)v).setForeground(ContextCompat.getDrawable(context, R.drawable.silent_alarm));
-                }
-            }
-        });
-
-        holder.selected.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(TagDataset.get(elementPosition).selected == false){
-                    TagDataset.get(elementPosition).selected = true;
-                    ((CheckBox)v).setSelected(true);
-                } else {
-                    TagDataset.get(elementPosition).selected = false;
-
-                    ((CheckBox)v).setSelected(false);
-                }
-            }
-        });
+        holder.alarmTrigger.setOnClickListener(controller.tag_list_item_alarm_listener);
+        holder.selected.setOnClickListener(controller.tag_list_item_selection_listener);
 
         holder.label.setOnClickListener(controller.tag_settings_dialog);
 
+    }
+
+    public void itemRemoved(int id){
+        this.TagDataset.remove(id);
+        notifyDataSetChanged();
     }
 
     // Return the size of your dataset (invoked by the layout manager)
