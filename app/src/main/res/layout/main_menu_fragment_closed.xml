@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <Button
+        android:id="@+id/main_menu_closed_bttn"
+        android:layout_width="40dp"
+        android:layout_height="30dp"
+        android:layout_gravity="end"
+        android:background="@drawable/main_menu_bttn"
+        android:foreground="@drawable/ic_more_vert_white_24dp" />
+
+</LinearLayout>

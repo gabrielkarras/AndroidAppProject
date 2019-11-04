@@ -1,8 +1,10 @@
-package com.example.ui;
+package fragments;
 
 import android.os.Bundle;
 
 import androidx.preference.PreferenceFragmentCompat;
+
+import com.example.ui.R;
 
 public class MySettingsFragment extends PreferenceFragmentCompat {
     @Override

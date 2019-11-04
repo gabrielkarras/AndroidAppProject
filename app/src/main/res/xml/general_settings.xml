@@ -43,10 +43,19 @@
         app:allowDividerBelow="true"
         app:title="Use personal Catalog"
         app:summary="Get suggestions based on the clothes in your catalog."/>
+
     <SwitchPreferenceCompat
         app:key="allow_comfort_check"
         app:allowDividerAbove="true"
+        app:defaultValue="true"
         app:title="Allow comfort checks"
-        app:summary="Without your feedback the suggestions are as good as guessing."/>
+        app:summary="Help us to help you by enabling rate-us notifications."/>
+
+    <SwitchPreferenceCompat
+        app:key="degrees_celsius"
+        app:allowDividerAbove="true"
+        app:defaultValue="true"
+        app:title="Use Celsius"
+        app:summary="Use degrees Celsius instead of Fahrenheit"/>
 
 </PreferenceScreen>
