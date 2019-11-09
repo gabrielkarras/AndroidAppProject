@@ -60,9 +60,9 @@ public class WeatherController {
     }
 
     private void setUpDisplayFields() {
-        button1 = caller_activity.findViewById(R.id.imageButton);
-        button2 = caller_activity.findViewById(R.id.imageButton2);
-        button3 = caller_activity.findViewById(R.id.imageButton3);
+        button1 = caller_activity.findViewById(R.id.suggestion_bttn1);
+        button2 = caller_activity.findViewById(R.id.suggestion_bttn2);
+        button3 = caller_activity.findViewById(R.id.suggestion_bttn3);
 
         textField1 = caller_activity.findViewById(R.id.sug1_title);
         textField2 = caller_activity.findViewById(R.id.sug2_title);

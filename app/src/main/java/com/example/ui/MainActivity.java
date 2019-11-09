@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
-        ((Button)findViewById(R.id.main_menu)).setOnClickListener(controller.menu_pop);
         WeatherController = new WeatherController(getApplicationContext(),this);
         WeatherController.displayWeatherInformation();
 
