@@ -49,11 +49,12 @@ public class WeatherController {
         WeatherDetails.execute(weatherURL);
 
         try {
-            //set time in mili
-            Thread.sleep(1000);
+                //set time in mili
+                //TODO: might cause an issue with other async functions
+                Thread.sleep(1000);
 
-        }catch (Exception e){
-            e.printStackTrace();
+            }catch (Exception e){
+                e.printStackTrace();
         }
         WeatherForecast = WeatherDetails.parseJSON();
     }
