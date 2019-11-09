@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,58 +8,50 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"
-    android:weightSum="100"
+    android:orientation="vertical"
+    android:weightSum="30"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/main_menu"
-        android:layout_width="40dp"
-        android:layout_height="30dp"
-        android:layout_gravity="center"
-        android:background="@drawable/main_menu_bttn"
-        android:foreground="@drawable/ic_more_vert_white_24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.07999998" />
-
-    <ImageView
-        android:id="@+id/weather_feed_image"
+    <RelativeLayout
+        android:id="@+id/static_weather_holder"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="30"
-        android:adjustViewBounds="false"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@id/weather_status"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/sky"
-        tools:src="@drawable/sky"
-        tools:srcCompat="@drawable/sky" />
-
-    <ImageView
-        android:id="@+id/darken_overlay"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="@drawable/separator_rect"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_weight="12"
+        android:background="@drawable/sky"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.35" />
+        app:layout_constraintVertical_weight="0.3">
 
-    <LinearLayout
-        android:id="@+id/temperature_wrapper"
+        <FrameLayout
+            android:id="@+id/menu_holder_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentEnd="false"
+            android:layout_marginTop="40dp">
+
+        </FrameLayout>
+
+
+        <fragment
+            android:id="@+id/daily_forecast_fragment"
+            android:name="fragments.DailyForecastFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/daily_forecast_fragment" />
+    </RelativeLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/weather_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="@id/darken_overlay"
+        android:layout_height="0dp"
+        android:layout_weight="2.5"
+        android:background="#5F718C"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+<<<<<<< HEAD
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
@@ -77,102 +69,60 @@
             android:textStyle="bold"
             android:typeface="normal"
             app:fontFamily="@font/roboto_regular" />
+=======
+        app:layout_constraintTop_toBottomOf="@id/static_weather_holder">
+>>>>>>> master
+
+        <Button
+            android:id="@+id/weekly_forecast"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="@drawable/suggestion_bttn"
+            android:foreground="@drawable/icons8_calendar_100"
+            app:layout_constraintEnd_toEndOf="@+id/weather_status"
+            app:layout_constraintHorizontal_bias="0.96"
+            app:layout_constraintStart_toStartOf="@+id/weather_status"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/felt_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:text="Feels\nLike"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:typeface="normal"
-            app:fontFamily="@font/roboto_regular" />
-
-        <TextView
-            android:id="@+id/felt_degress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="-5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="50dp"
-            android:layout_weight="5"
-            android:text="10"
+            android:id="@+id/weather_status"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="#659BFF"
+            android:font="@font/roboto_regular"
+            android:paddingVertical="5dp"
+            android:paddingLeft="20dp"
+            android:text="Partly Sunny"
             android:textColor="#FFFFFF"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:typeface="normal"
-            app:fontFamily="@font/roboto_regular" />
-
-        <ImageView
-            android:id="@+id/weather_status_icon"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_gravity="right"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/wether_partly_cloudy"
-            tools:src="@drawable/wether_partly_cloudy"
-            tools:srcCompat="@drawable/wether_partly_cloudy" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/weather_status"
-        android:layout_width="match_parent"
-        android:layout_height="47dp"
-        android:layout_weight="1"
-        android:background="#659BFF"
-        android:font="@font/roboto_regular"
-        android:paddingVertical="5dp"
-        android:paddingLeft="20dp"
-        android:text="Partly Sunny"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/menu_wrapper"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/darken_overlay"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/weekly_forecast"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:background="@drawable/suggestion_bttn"
-        android:foreground="@drawable/icons8_calendar_100"
-        app:layout_constraintBottom_toTopOf="@+id/menu_wrapper"
-        app:layout_constraintEnd_toEndOf="@+id/weather_status"
-        app:layout_constraintHorizontal_bias="0.955"
-        app:layout_constraintStart_toStartOf="@+id/weather_status"
-        app:layout_constraintTop_toTopOf="@+id/weather_status"
-        app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/menu_wrapper"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="70"
+        android:layout_weight="15.5"
         android:background="#5F718C"
         android:gravity="center"
         android:orientation="vertical"
+        android:weightSum="30"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weather_status">
+        app:layout_constraintTop_toBottomOf="@+id/weather_bar">
 
         <TextView
             android:id="@+id/menu_title"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="5"
-            android:paddingTop="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
             android:text="You May Want"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
@@ -181,8 +131,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="20"
+            android:layout_height="wrap_content"
+            android:layout_weight="24"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -194,7 +144,7 @@
                 android:orientation="vertical">
 
                 <Button
-                    android:id="@+id/imageButton"
+                    android:id="@+id/suggestion_bttn1"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center"
@@ -212,6 +162,13 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:fontFamily="@font/roboto_regular" />
+
+                <fragment
+                    android:id="@+id/fragment_suggeston_1"
+                    android:name="fragments.SuggestionExplanationClosed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:layout="@layout/suggestion_explanation_closed" />
             </LinearLayout>
 
             <LinearLayout
@@ -224,7 +181,7 @@
                 android:orientation="vertical">
 
                 <Button
-                    android:id="@+id/imageButton2"
+                    android:id="@+id/suggestion_bttn2"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center"
@@ -242,6 +199,13 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:fontFamily="@font/roboto_regular" />
+
+                <fragment
+                    android:id="@+id/fragment_suggeston_2"
+                    android:name="fragments.SuggestionExplanationClosed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:layout="@layout/suggestion_explanation_closed" />
             </LinearLayout>
 
             <LinearLayout
@@ -254,7 +218,7 @@
                 android:orientation="vertical">
 
                 <Button
-                    android:id="@+id/imageButton3"
+                    android:id="@+id/suggestion_bttn3"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center"
@@ -272,15 +236,24 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:fontFamily="@font/roboto_regular" />
+
+                <fragment
+                    android:id="@+id/fragment_suggeston_3"
+                    android:name="fragments.SuggestionExplanationClosed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:layout="@layout/suggestion_explanation_closed" />
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="12"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_weight="3"
             android:background="#8AB5CAFA"
+            android:baselineAligned="false"
             android:gravity="center_horizontal"
             android:orientation="horizontal"
             android:paddingVertical="20dp"
@@ -390,4 +363,4 @@
 
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

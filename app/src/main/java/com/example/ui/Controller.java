@@ -1,19 +1,17 @@
 package com.example.ui;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
-import android.widget.PopupMenu;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
-import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.Console;
+import fragments.TagDialogFragment;
 
 public class Controller{
     private Context context;
@@ -25,24 +23,14 @@ public class Controller{
         caller_activity = caller;
     }
 
-    View.OnClickListener menu_pop = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            PopupMenu popupMenu = new PopupMenu(context,v);
-            popupMenu.inflate(R.menu.popup_menu);
-            popupMenu.show();
-            popupMenu.setOnMenuItemClickListener(menu_item_click);
-        }
-    };
-
-    View.OnClickListener tag_settings_dialog = new View.OnClickListener() {
+    public View.OnClickListener tag_settings_dialog = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             ((TagsActivity)caller_activity).startSettingsDialogFragment((TagsRecyclerAdapter.MyViewHolder)((View)v.getParent()).getTag());
         }
     };
 
-    View.OnClickListener tag_create_dialog = new View.OnClickListener() {
+    public View.OnClickListener tag_create_dialog = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             ((TagsActivity)caller_activity).startCreateDialogFragment();
@@ -50,14 +38,14 @@ public class Controller{
     };
 
 
-    static View.OnClickListener fragment_cancel_dialog = new View.OnClickListener() {
+    public static View.OnClickListener fragment_cancel_dialog = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             ((DialogFragment)v.getTag()).dismiss();
         }
     };
 
-    static View.OnClickListener fragment_submit_tag_dialog = new View.OnClickListener() {
+    public static View.OnClickListener fragment_submit_tag_dialog = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             ((TagDialogFragment)v.getTag()).submitAndTerminate();
@@ -65,12 +53,69 @@ public class Controller{
     };
 
 
-
-    PopupMenu.OnMenuItemClickListener menu_item_click = new PopupMenu.OnMenuItemClickListener() {
+    public View.OnClickListener menu_bttn_click = new View.OnClickListener() {
         @Override
-        public boolean onMenuItemClick(MenuItem item) {
+        public void onClick(View item) {
+            ((MainActivity)caller_activity).openMenu();
+        }
+    };
 
-            switch(item.getTitle().toString()){
+    public View.OnClickListener outbounds_click = new View.OnClickListener() {
+        @Override
+        public void onClick(View item) {
+            ((MainActivity)caller_activity).closeMenu();
+        }
+    };
+
+    public View.OnClickListener suggestion_toggler = new View.OnClickListener() {
+        @Override
+        public void onClick(View item) {
+            ((MainActivity)caller_activity).closeMenu();
+            int fragment_holder_id = (Integer)item.getTag();
+
+            switch((Integer)item.getTag()){
+                case R.id.fragment_suggeston_1:
+
+                    if (((MainActivity)caller_activity).explanation1_visible){
+                        ((MainActivity)caller_activity).explanation1_visible = false;
+                        ((MainActivity)caller_activity).closeExplanation(fragment_holder_id);
+                    } else {
+                        ((MainActivity)caller_activity).explanation1_visible = true;
+                        ((MainActivity)caller_activity).openExplanation(fragment_holder_id);
+                    }
+
+                    break;
+                case R.id.fragment_suggeston_2:
+                    if (((MainActivity)caller_activity).explanation2_visible){
+                        ((MainActivity)caller_activity).explanation2_visible = false;
+                        ((MainActivity)caller_activity). closeExplanation(fragment_holder_id);
+                    } else {
+                        ((MainActivity)caller_activity).explanation2_visible = true;
+                        ((MainActivity)caller_activity).openExplanation(fragment_holder_id);
+                    }
+
+                    break;
+                case R.id.fragment_suggeston_3:
+                    if (((MainActivity)caller_activity).explanation3_visible){
+                        ((MainActivity)caller_activity).explanation3_visible = false;
+                        ((MainActivity)caller_activity).closeExplanation(fragment_holder_id);
+                    } else {
+                        ((MainActivity)caller_activity).explanation3_visible = true;
+                        ((MainActivity)caller_activity).openExplanation(fragment_holder_id);
+                    }
+
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+    public View.OnClickListener menu_item_click = new View.OnClickListener() {
+        @Override
+        public void onClick(View item) {
+
+            switch(((Button)item).getText().toString()){
 
                 case "Settings":
                     ((MainActivity)caller_activity).startActivity(SettingsActivity.class);
@@ -87,12 +132,10 @@ public class Controller{
                 default:
                     break;
             }
-
-            return true;
         }
     };
 
-    View.OnClickListener tag_list_item_selection_listener = new View.OnClickListener() {
+    public View.OnClickListener tag_list_item_selection_listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if(((TagObj)v.getTag()).selected == false){
@@ -106,7 +149,7 @@ public class Controller{
         }
     };
 
-    View.OnClickListener tag_list_item_alarm_listener = new View.OnClickListener() {
+    public View.OnClickListener tag_list_item_alarm_listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
 

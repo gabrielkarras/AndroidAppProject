@@ -1,4 +1,4 @@
-package com.example.ui;
+package fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -18,6 +18,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import com.example.ui.Controller;
+import com.example.ui.DataLinker;
+import com.example.ui.R;
+import com.example.ui.TagObj;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -150,7 +155,7 @@ public class TagDialogFragment extends DialogFragment {
     public void initiateTagInitializationAttempts(){
         id.setText("10100001");
         //TODO async BLUETOOTH scan to get a tag ID.
-        //TODO should we do also wifi-on-same-network scan?
+
     }
 
 }

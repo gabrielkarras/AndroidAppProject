@@ -7,6 +7,8 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import fragments.MySettingsFragment;
+
 public class SettingsActivity extends AppCompatActivity {
     private Controller controller;
 
