@@ -18,7 +18,7 @@ public class TrackerStatusController {
         INVALID, FORGOT_TRACKER, LEAVING_WITH_TRACKER;
     }
 
-    public TrackerStatusController(Context contextif (mWeatherController.isGonnaRain()), AppCompatActivity caller, WeatherController WxController)
+    public TrackerStatusController(Context context, AppCompatActivity caller, WeatherController WxController)
     {
         this.context = context;
         caller_activity = caller;
@@ -38,7 +38,7 @@ public class TrackerStatusController {
         int ThresholdWifiLevel = 3;
         int WifiLevel = WifiManager.calculateSignalLevel(mWifiInfo.getRssi(), numberOfLevels);
 
-
+        if (mWeatherController.isGonnaRain())
         {
             if (WifiLevel > ThresholdWifiLevel)
                 return UserTrackerStatus.INVALID;
