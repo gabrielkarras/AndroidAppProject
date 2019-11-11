@@ -51,7 +51,7 @@ public class WeatherController {
         try {
                 //set time in mili
                 //TODO: might cause an issue with other async functions
-                Thread.sleep(1000);
+                Thread.sleep(500);
 
             }catch (Exception e){
                 e.printStackTrace();
@@ -143,5 +143,15 @@ public class WeatherController {
             weather_status_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icons8_stormy_weather_75));
         else if (temp2 == WeatherForecastInformation.WeatherCondition.SNOW)
             weather_status_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icons8_snow_storm_75));
+    }
+
+    public boolean isGonnaSnow()
+    {
+        return WeatherForecast.isGonnaSnow();
+    }
+
+    public boolean isGonnaRain()
+    {
+        return WeatherForecast.isGonnaRain();
     }
 }
