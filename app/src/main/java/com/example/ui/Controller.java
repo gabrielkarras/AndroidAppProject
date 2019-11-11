@@ -14,9 +14,9 @@ import androidx.fragment.app.DialogFragment;
 import fragments.TagDialogFragment;
 
 public class Controller{
-
     private Context context;
     private AppCompatActivity caller_activity;
+
 
     public Controller(Context context, AppCompatActivity caller){
         this.context = context;

@@ -300,7 +300,7 @@
                     android:id="@+id/critical_parameter3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Humidity"
+                    android:text="Snow"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -309,7 +309,7 @@
                     android:id="@+id/critical_parameter3_desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="50%"
+                    android:text="10 mm"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"
                     android:textStyle="bold" />
