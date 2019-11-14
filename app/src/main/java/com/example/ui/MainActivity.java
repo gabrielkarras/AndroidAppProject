@@ -2,9 +2,11 @@ package com.example.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
@@ -65,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        }).start();
         /////////////////////////////
+        WeatherController = new WeatherController(getApplicationContext(),this);
+        WeatherController.displayWeatherInformation(PreferenceManager.getDefaultSharedPreferences(this).getString("location_preference", "Default"));
 
         openMenuFragment = new MainMenuFragmentOpen(controller);
         closedMenuFragment = new MainMenuFragmentClosed(controller);

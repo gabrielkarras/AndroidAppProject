@@ -1,16 +1,21 @@
 package com.example.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
+import android.preference.PreferenceScreen;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceFragment;
 
 import fragments.MySettingsFragment;
 
 public class SettingsActivity extends AppCompatActivity {
     private Controller controller;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
