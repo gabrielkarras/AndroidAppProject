@@ -59,6 +59,21 @@ public class WeatherController {
         WeatherForecast = WeatherDetails.parseJSON();
     }
 
+    private void setUpLocationCode(String city)
+    {
+        FetchLocationDetails tempLocationFetcher = new FetchLocationDetails();
+        tempLocationFetcher.execute(NetworkUltility.buildURLForLocation(city));
+        try {
+            //set time in mili
+            //TODO: might cause an issue with other async functions
+            Thread.sleep(500);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        tempLocationFetcher.parseLocationFromJSON();
+    }
+
     private void setUpDisplayFields() {
         button1 = caller_activity.findViewById(R.id.suggestion_bttn1);
         button2 = caller_activity.findViewById(R.id.suggestion_bttn2);
@@ -112,37 +127,42 @@ public class WeatherController {
         textField3.setText(WeatherForecast.WarmWeatherItems[2]);
     }
 
-    public void displayWeatherInformation()
+    public void displayWeatherInformation(String city)
     {
+        setUpLocationCode(city);
         setUpDisplayFields();
         setUpWeatherForecast();
-        WeatherForecastInformation.WeatherType temp = WeatherForecast.getWeatherType();
 
-        if (temp == WeatherForecastInformation.WeatherType.COLD)
-            displayColdWeatherItems();
-        else if (temp == WeatherForecastInformation.WeatherType.CHILLING)
-            displayChillingWeatherItems();
-        else
-            displayWarmWeatherItems();
+        if (WeatherForecast != null)
+        {
+            WeatherForecastInformation.WeatherType temp = WeatherForecast.getWeatherType();
+
+            if (temp == WeatherForecastInformation.WeatherType.COLD)
+                displayColdWeatherItems();
+            else if (temp == WeatherForecastInformation.WeatherType.CHILLING)
+                displayChillingWeatherItems();
+            else
+                displayWarmWeatherItems();
 
 
-        degrees_main.setText((WeatherForecast.getDecimalAvgTemp() + Farenheit));
-        felt_degress.setText(String.valueOf(WeatherForecast.getAvgTemp()));
-        critical_parameter1_desc.setText(WeatherForecast.getWindSpeed() + WindUnit);
-        critical_parameter2_desc.setText(WeatherForecast.getWindGustSpeed() + WindUnit);
-        critical_parameter3_desc.setText(WeatherForecast.getSnowTotal() + LiquidUnit);
-        critical_parameter4_desc.setText(WeatherForecast.getRainTotal() + LiquidUnit);
+            degrees_main.setText((WeatherForecast.getDecimalAvgTemp() + Farenheit));
+            felt_degress.setText(String.valueOf(WeatherForecast.getAvgTemp()));
+            critical_parameter1_desc.setText(WeatherForecast.getWindSpeed() + WindUnit);
+            critical_parameter2_desc.setText(WeatherForecast.getWindGustSpeed() + WindUnit);
+            critical_parameter3_desc.setText(WeatherForecast.getSnowTotal() + LiquidUnit);
+            critical_parameter4_desc.setText(WeatherForecast.getRainTotal() + LiquidUnit);
 
-        weather_status.setText(WeatherForecast.getWeatherConditionPhrase());
+            weather_status.setText(WeatherForecast.getWeatherConditionPhrase());
 
-        WeatherForecastInformation.WeatherCondition temp2 = WeatherForecast.getWeatherCondition();
+            WeatherForecastInformation.WeatherCondition temp2 = WeatherForecast.getWeatherCondition();
 
-        if (temp2 == WeatherForecastInformation.WeatherCondition.SUNNY)
-            weather_status_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.wether_partly_cloudy));
-        else if (temp2 == WeatherForecastInformation.WeatherCondition.RAIN)
-            weather_status_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icons8_stormy_weather_75));
-        else if (temp2 == WeatherForecastInformation.WeatherCondition.SNOW)
-            weather_status_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icons8_snow_storm_75));
+            if (temp2 == WeatherForecastInformation.WeatherCondition.SUNNY)
+                weather_status_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.wether_partly_cloudy));
+            else if (temp2 == WeatherForecastInformation.WeatherCondition.RAIN)
+                weather_status_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icons8_stormy_weather_75));
+            else if (temp2 == WeatherForecastInformation.WeatherCondition.SNOW)
+                weather_status_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icons8_snow_storm_75));
+        }
     }
 
     public boolean isGonnaSnow()
