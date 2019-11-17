@@ -2,7 +2,6 @@ package com.example.ui;
 
 import android.content.Context;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -10,10 +9,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import java.net.URL;
+import java.text.DecimalFormat;
 
 public class WeatherController {
     private final String Celcius = " °C";
-    private final String Farenheit = " °F";
+    private final String Fahrenheit = " °F";
     private final String WindUnit = " Mph";
     private final String LiquidUnit = " inch";
     private FetchWeatherDetails WeatherDetails;
@@ -34,6 +34,8 @@ public class WeatherController {
     private ImageView weather_status_icon;
     private AppCompatActivity caller_activity;
     private Context context;
+    private boolean displayFahrenheit = true;
+    private DecimalFormat df = new DecimalFormat("#.##");
 
     public WeatherController(Context context, AppCompatActivity caller)
     {
@@ -42,9 +44,9 @@ public class WeatherController {
     }
 
 
-    public void setUpWeatherForecast()
+    public void setUpWeatherForecast(String cityName)
     {
-        URL weatherURL = NetworkUltility.buildURLForWeather();
+        URL weatherURL = NetworkUltility.buildURLForWeather(cityName, context);
         WeatherDetails = new FetchWeatherDetails();
         WeatherDetails.execute(weatherURL);
 
@@ -59,21 +61,6 @@ public class WeatherController {
         WeatherForecast = WeatherDetails.parseJSON();
     }
 
-    private void setUpLocationCode(String city)
-    {
-        FetchLocationDetails tempLocationFetcher = new FetchLocationDetails();
-        tempLocationFetcher.execute(NetworkUltility.buildURLForLocation(city));
-        try {
-            //set time in mili
-            //TODO: might cause an issue with other async functions
-            Thread.sleep(500);
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        tempLocationFetcher.parseLocationFromJSON();
-    }
-
     private void setUpDisplayFields() {
         button1 = caller_activity.findViewById(R.id.suggestion_bttn1);
         button2 = caller_activity.findViewById(R.id.suggestion_bttn2);
@@ -84,6 +71,13 @@ public class WeatherController {
         textField3 = caller_activity.findViewById(R.id.sug3_title);
 
         degrees_main = caller_activity.findViewById(R.id.degrees_main);
+//        degrees_main.setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View v) {
+//                switchTempUnit();
+//            }
+//        });
         felt_degress = caller_activity.findViewById(R.id.felt_degress);
         critical_parameter1_desc = caller_activity.findViewById(R.id.critical_parameter1_desc);
         critical_parameter2_desc = caller_activity.findViewById(R.id.critical_parameter2_desc);
@@ -129,39 +123,53 @@ public class WeatherController {
 
     public void displayWeatherInformation(String city)
     {
-        setUpLocationCode(city);
-        setUpDisplayFields();
-        setUpWeatherForecast();
+        try {
+            setUpDisplayFields();
+            setUpWeatherForecast(city);
 
-        if (WeatherForecast != null)
+            if (WeatherForecast != null) {
+                WeatherForecastInformation.WeatherType temp = WeatherForecast.getWeatherType();
+
+                if (temp == WeatherForecastInformation.WeatherType.COLD)
+                    displayColdWeatherItems();
+                else if (temp == WeatherForecastInformation.WeatherType.CHILLING)
+                    displayChillingWeatherItems();
+                else
+                    displayWarmWeatherItems();
+
+                if (displayFahrenheit)
+                {
+                    degrees_main.setText((df.format(WeatherForecast.getDecimalAvgTemp()) + Fahrenheit));
+                    felt_degress.setText(df.format(WeatherForecast.getAvgTemp()));
+                }
+                else
+                {
+                    degrees_main.setText(df.format(convertToCelsius(WeatherForecast.getDecimalAvgTemp())) + Celcius);
+                    felt_degress.setText(df.format(convertToCelsius(WeatherForecast.getAvgTemp())));
+                }
+
+                critical_parameter1_desc.setText(WeatherForecast.getWindSpeed() + WindUnit);
+                critical_parameter2_desc.setText(WeatherForecast.getWindGustSpeed() + WindUnit);
+//                critical_parameter3_desc.setText(WeatherForecast.getSnowTotal() + LiquidUnit);
+//                critical_parameter4_desc.setText(WeatherForecast.getRainTotal() + LiquidUnit);
+                critical_parameter3_desc.setText("NaN");
+                critical_parameter4_desc.setText("NaN");
+
+                weather_status.setText(WeatherForecast.getWeatherConditionPhrase());
+
+                WeatherForecastInformation.WeatherCondition temp2 = WeatherForecast.getWeatherCondition();
+
+                if (temp2 == WeatherForecastInformation.WeatherCondition.SUNNY)
+                    weather_status_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.wether_partly_cloudy));
+                else if (temp2 == WeatherForecastInformation.WeatherCondition.RAIN)
+                    weather_status_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icons8_stormy_weather_75));
+                else if (temp2 == WeatherForecastInformation.WeatherCondition.SNOW)
+                    weather_status_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icons8_snow_storm_75));
+            }
+
+        }catch(Exception e)
         {
-            WeatherForecastInformation.WeatherType temp = WeatherForecast.getWeatherType();
-
-            if (temp == WeatherForecastInformation.WeatherType.COLD)
-                displayColdWeatherItems();
-            else if (temp == WeatherForecastInformation.WeatherType.CHILLING)
-                displayChillingWeatherItems();
-            else
-                displayWarmWeatherItems();
-
-
-            degrees_main.setText((WeatherForecast.getDecimalAvgTemp() + Farenheit));
-            felt_degress.setText(String.valueOf(WeatherForecast.getAvgTemp()));
-            critical_parameter1_desc.setText(WeatherForecast.getWindSpeed() + WindUnit);
-            critical_parameter2_desc.setText(WeatherForecast.getWindGustSpeed() + WindUnit);
-            critical_parameter3_desc.setText(WeatherForecast.getSnowTotal() + LiquidUnit);
-            critical_parameter4_desc.setText(WeatherForecast.getRainTotal() + LiquidUnit);
-
-            weather_status.setText(WeatherForecast.getWeatherConditionPhrase());
-
-            WeatherForecastInformation.WeatherCondition temp2 = WeatherForecast.getWeatherCondition();
-
-            if (temp2 == WeatherForecastInformation.WeatherCondition.SUNNY)
-                weather_status_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.wether_partly_cloudy));
-            else if (temp2 == WeatherForecastInformation.WeatherCondition.RAIN)
-                weather_status_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icons8_stormy_weather_75));
-            else if (temp2 == WeatherForecastInformation.WeatherCondition.SNOW)
-                weather_status_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icons8_snow_storm_75));
+            e.printStackTrace();
         }
     }
 
@@ -174,4 +182,17 @@ public class WeatherController {
     {
         return WeatherForecast.isGonnaRain();
     }
+
+    private double convertToCelsius(double temp)
+    {
+        double result;
+        result = (temp - 32)*5/9;
+        return Math.round(result*100)/100.0;
+    }
+
+    public void switchTempUnit()
+    {
+        displayFahrenheit = !displayFahrenheit;
+    }
+
 }

@@ -31,13 +31,13 @@ public class WeatherForecastInformation {
         return WeatherCondition;
     }
 
-    public void setWeatherCondition(int weatherCondition) {
-        if (weatherCondition < 12)
-            WeatherCondition = WeatherCondition.SUNNY;
-        else if (weatherCondition < 22)
+    public void setWeatherCondition(String weatherCondition) {
+        if (weatherCondition.equals("snow"))
+            WeatherCondition = WeatherCondition.SNOW;
+        else if (weatherCondition.equals("rain"))
             WeatherCondition = WeatherCondition.RAIN;
         else
-            WeatherCondition = WeatherCondition.SNOW;
+            WeatherCondition = WeatherCondition.SUNNY;
     }
 
     public String getWeatherConditionPhrase() {
