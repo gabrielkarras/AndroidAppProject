@@ -1,56 +1,31 @@
 package com.example.ui;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.io.Serializable;
 
 public class TagObj implements Serializable{
 
     private String name;
-    private long tagID;
-    private boolean buzzerEnabled;
-    private String status;
-
-    public boolean alarm = false;
+    private String tagAddress;
     public boolean selected = false;
 
-    public TagObj (String name, long ID, boolean buzzerEnabled){
-        this.name = name;
-        this.tagID = ID;
-        this.buzzerEnabled = buzzerEnabled;
-        status = "Unreachable";
 
-    }
-
-    public TagObj (String name, long ID, boolean buzzerEnabled, String status){
+    public TagObj (String name, String tagAddress){
         this.name = name;
-        this.tagID = ID;
-        this.buzzerEnabled = buzzerEnabled;
-        this.status = status;
+        this.tagAddress = tagAddress;
     }
 
     public String getName(){
         return name;
     }
 
-    public long getTagID() {
-        return tagID;
+    public String getTagAddress() {
+        return tagAddress;
     }
 
-    public boolean isBuzzerEnabled() {
-        return buzzerEnabled;
-    }
-
-    public void updateFields(String name, boolean buzzerEnabled, String status ){
+    public void updateFields(String name){
         this.name = name;
-        this.status = status;
-        this.buzzerEnabled = buzzerEnabled;
-    }
-
-    public void updateStatus(String status){
-        this.status = status;
-    }
-
-    public String getStatus() {
-        return status;
     }
 
 

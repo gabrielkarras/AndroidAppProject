@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -126,18 +127,30 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
     public void deleteSelected(){
 
         if (myDataset != null) {
-            int counter = 0;
-            Iterator<TagObj> iterator = myDataset.listIterator();
-            while(iterator.hasNext()){
+            boolean changed = false;
 
-                TagObj temp = iterator.next();
+            for(int i=0;i<myDataset.size();i++){
+                Log.e("FFFFFFFFFF",myDataset.get(i).getName()+"  "+myDataset.get(i).selected);
+            }
 
-                if (temp.selected){
-                    iterator.remove();
-                    mAdapter.notifyItemRemoved(counter--);
+            do {
+                changed = false;
+                ListIterator<TagObj> iterator = myDataset.listIterator();
+                while (iterator.hasNext()) {
+
+                    TagObj temp = iterator.next();
+
+                    if (temp.selected) {
+                        int rm_item_index = iterator.nextIndex()-1;
+                        iterator.remove();
+                        mAdapter.notifyItemRemoved(rm_item_index);
+                        changed = true;
+                    }
                 }
+            }while(changed);
 
-                counter++;
+            for(int i=0;i<myDataset.size();i++){
+                Log.e("FFFFFFFFFF",myDataset.get(i).getName()+"  "+myDataset.get(i).selected);
             }
 
             if(myDataset.size() == 0){
@@ -155,12 +168,13 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
                 fragmentTransaction.commit();
             }
         }
+
     }
 
-    private int recordIndex(long id) {
+    private int recordIndex(String address) {
         ListIterator<TagObj> it = myDataset.listIterator();
         while(it.hasNext()){
-            if (it.next().getTagID() == id){
+            if (it.next().getTagAddress().equals(address)){
                 return it.nextIndex() - 1;
             }
         }
@@ -172,15 +186,17 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
     public void treatData(JSONObject data) {
         try {
             //Check if record exists and update the existing one
-            int tagNumber = recordIndex(data.getLong("id"));
+            int tagNumber  = recordIndex(data.getString("address"));
+
             if( tagNumber >= 0){
-                myDataset.get(tagNumber).updateFields(data.getString("name"), data.getBoolean("buzzable"),data.getString("status"));
+                myDataset.get(tagNumber).updateFields(data.getString("name").trim());
                 mAdapter.notifyDataSetChanged();
             }
-
             //Create new record
             else {
-                myDataset.add(new TagObj(data.getString("name"),data.getLong("id"),data.getBoolean("buzzable"),data.getString("status")));
+                TagObj temp = new TagObj(data.getString("name").trim(),data.getString("address"));
+                temp.selected = false;
+                myDataset.add(temp);
 
                 if(firstTimeUser){
                     firstTimeUser = false;
@@ -200,10 +216,11 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
                     });
 
                     // specify an adapter
-                    mAdapter = new TagsRecyclerAdapter(myDataset, getApplicationContext(), controller);
+                    mAdapter = new TagsRecyclerAdapter(myDataset, this, controller);
                     recyclerView.setAdapter(mAdapter);
+                } else {
 
-                    mAdapter.notifyItemInserted(myDataset.size()-1);
+                    mAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -219,11 +236,11 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
         try {
             while (iterator.hasNext()) {
                 TagObj temp = iterator.next();
-                if (temp.getTagID() == data.getLong("id") && data.getString("actionItem") != "UPDATE"){
-                    return "Tag ID already registered.";
+                if (temp.getTagAddress().equals(data.getString("address")) && !data.getString("actionItem").equals("UPDATE")){
+                    return "Tag Address already registered.";
                 }
 
-                if (temp.getName().equals(data.getString("name"))){
+                if (temp.getName().equals(data.getString("name").trim())){
                     return "Tag Name already taken.";
                 }
             }

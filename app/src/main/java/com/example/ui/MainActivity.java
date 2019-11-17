@@ -36,26 +36,26 @@ public class MainActivity extends AppCompatActivity {
 
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
-        WeatherController = new WeatherController(getApplicationContext(),this);
-        WeatherController.displayWeatherInformation();
+     //   WeatherController = new WeatherController(getApplicationContext(),this);
+      //  WeatherController.displayWeatherInformation();
 
         //TESTING TrackerController
-        final TrackerStatusController TrackerController = new TrackerStatusController(getApplicationContext(),this, WeatherController);
+      //  final TrackerStatusController TrackerController = new TrackerStatusController(getApplicationContext(),this, WeatherController);
         //TrackerController.checkTrackerActionStatus();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while(true){
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    TrackerController.checkTrackerActionStatus();
-                }
-            }
-        }).start();
+//
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while(true){
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    TrackerController.checkTrackerActionStatus();
+//                }
+//            }
+//        }).start();
         /////////////////////////////
 
         openMenuFragment = new MainMenuFragmentOpen(controller);

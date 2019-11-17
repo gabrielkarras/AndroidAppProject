@@ -1,16 +1,14 @@
 package com.example.ui;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -20,21 +18,20 @@ public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapte
     private Controller controller;
     private Context context;
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
         public CheckBox selected;
         public TextView label;
-        public ImageButton alarmTrigger;
         public LinearLayout parentLayout;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             selected = itemView.findViewById(R.id.tagCheckBox);
             label = itemView.findViewById(R.id.tagLabel);
-            alarmTrigger = itemView.findViewById(R.id.tagAlarmTrigger);
             parentLayout = itemView.findViewById(R.id.taglist_item_parent);
         }
     }
+
 
     public TagsRecyclerAdapter(ArrayList<TagObj> myDataset, Context context, Controller controller) {
         TagDataset = myDataset;
@@ -42,7 +39,11 @@ public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapte
         this.controller = controller;
     }
 
-
+    @Override
+    public void onViewRecycled(@NonNull MyViewHolder holder) {
+        super.onViewRecycled(holder);
+        holder.selected.setChecked(false);
+    }
 
     // Create new views (invoked by the layout manager)
     @Override
@@ -62,15 +63,16 @@ public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapte
         // - replace the contents of the view with that element
         holder.label.setText(TagDataset.get(position).getName());
 
-        holder.alarmTrigger.setTag(TagDataset.get(position));
         holder.selected.setTag(TagDataset.get(position));
 
-        holder.alarmTrigger.setOnClickListener(controller.tag_list_item_alarm_listener);
-        holder.selected.setOnClickListener(controller.tag_list_item_selection_listener);
+        holder.selected.setSelected(TagDataset.get(position).selected);
+        holder.selected.setOnCheckedChangeListener(controller.tag_list_item_selection_listener);
 
         holder.label.setOnClickListener(controller.tag_settings_dialog);
 
     }
+
+
 
     public void itemRemoved(int id){
         this.TagDataset.remove(id);
