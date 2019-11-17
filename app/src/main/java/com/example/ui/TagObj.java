@@ -1,10 +1,9 @@
 package com.example.ui;
 
-import androidx.recyclerview.widget.RecyclerView;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-import java.io.Serializable;
-
-public class TagObj implements Serializable{
+public class TagObj implements Parcelable {
 
     private String name;
     private String tagAddress;
@@ -15,6 +14,46 @@ public class TagObj implements Serializable{
         this.name = name;
         this.tagAddress = tagAddress;
     }
+
+    public TagObj (Parcel in){
+        this.name = in.readString();
+        this.tagAddress = in.readString();
+        this.selected = in.readInt() != 0 ? true : false;
+    }
+
+    private  void readFromParcel (Parcel in){
+        this.name = in.readString();
+        this.tagAddress = in.readString();
+        this.selected = in.readInt() != 0 ? true : false;
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(tagAddress);
+        dest.writeInt(selected ? 1 : 0);
+    }
+
+
+
+    public static final Creator<TagObj> CREATOR = new Creator<TagObj>() {
+        @Override
+        public TagObj createFromParcel(Parcel source) {
+            return new TagObj(source);
+        }
+
+        @Override
+        public TagObj[] newArray(int size) {
+            return new TagObj[size];
+        }
+    };
+
 
     public String getName(){
         return name;

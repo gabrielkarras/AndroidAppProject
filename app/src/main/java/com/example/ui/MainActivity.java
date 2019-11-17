@@ -15,6 +15,8 @@ import fragments.MainMenuFragmentOpen;
 import fragments.SuggestionExplanationClosed;
 import fragments.SuggestionExplanationOpen;
 
+import static com.example.ui.AppName.registeredTags;
+
 public class MainActivity extends AppCompatActivity {
     private Controller controller;
     private WeatherController WeatherController;
@@ -36,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
 
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
+
+        if(registeredTags != null || registeredTags.size() != 0){
+            AppName.invokeTrackingService();
+        }
      //   WeatherController = new WeatherController(getApplicationContext(),this);
       //  WeatherController.displayWeatherInformation();
 
@@ -119,6 +125,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openExplanation(int fragment_holder_id){
+        registeredTags.remove(1);
+        registeredTags.add(new TagObj("ZAPAPUSTA","HELLLLLLO"));
+
+        AppName.serviceController.updateTrackingTagList(registeredTags);
         try {
             fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.setCustomAnimations(R.anim.enter_top,R.anim.exit_top);
