@@ -11,7 +11,9 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import fragments.MainMenuFragmentClosed;
 import fragments.MainMenuFragmentOpen;
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 //        }).start();
         /////////////////////////////
         WeatherController = new WeatherController(getApplicationContext(),this);
-        WeatherController.displayWeatherInformation(PreferenceManager.getDefaultSharedPreferences(this).getString("location_preference", "Default"));
+        setUpUI();
 
         openMenuFragment = new MainMenuFragmentOpen(controller);
         closedMenuFragment = new MainMenuFragmentClosed(controller);
@@ -94,6 +96,12 @@ public class MainActivity extends AppCompatActivity {
         sugg3.setTag(R.id.fragment_suggeston_3);
         sugg3.setOnClickListener(controller.suggestion_toggler);
 
+    }
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        WeatherController.displayWeatherInformation(PreferenceManager.getDefaultSharedPreferences(this).getString("location_preference", "Default"));
     }
 
     public void openMenu(){
@@ -157,6 +165,20 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    private void setUpUI()
+    {
+        TextView degrees_main;
+        degrees_main = findViewById(R.id.degrees_main);
+        degrees_main.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                WeatherController.switchTempUnit();
+                onResume();
+            }
+        });
     }
 }
 
