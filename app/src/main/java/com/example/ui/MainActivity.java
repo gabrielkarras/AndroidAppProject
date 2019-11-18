@@ -8,6 +8,7 @@ import androidx.preference.PreferenceManager;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.Manifest;
@@ -228,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 WeatherController.switchTempUnit();
                 onResume();
+                //reDraw();
             }
         });
     }
@@ -242,6 +244,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             notificationsEnabled = false;
         }
+    }
+
+    private void reDraw()
+    {
+        WeatherController.displayWeatherInformation(PreferenceManager.getDefaultSharedPreferences(this).getString("location_preference", "Default"));
     }
 }
 

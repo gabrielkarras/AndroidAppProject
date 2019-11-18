@@ -1,9 +1,11 @@
 package com.example.ui;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.IOException;
@@ -17,12 +19,33 @@ import java.util.Scanner;
 
 public class NetworkUltility {
     private final static String WEATHER_API_BASE = "https://api.darksky.net/forecast/2c7a7a40eeca1108d7de3964990cb72b/";
+    private static String latLong = "";
+    private static String lastLatLong = "";
 
-    public static URL buildURLForWeather(String cityName, Context context)
-    {
-        String latLong = getLatLong(cityName, context);
+    public static URL buildURLForWeather(final String cityName, final Context context) {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                getLatLong(cityName, context);
+            }
+        });
+        int timeKeeping = 0;
+
+        while ((latLong == "" || latLong.toLowerCase().equals(lastLatLong.toLowerCase())) && timeKeeping <= 1500)
+        {
+            try {
+                //set time in mili
+                //TODO: might cause an issue with other async functions
+                Thread.sleep(10);
+                timeKeeping = timeKeeping +10;
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
         Uri buildUri = Uri.parse(WEATHER_API_BASE).buildUpon()
                 .appendPath(latLong).build();
+        lastLatLong = latLong;
 
         URL url = null;
         try
@@ -62,7 +85,7 @@ public class NetworkUltility {
          }
      }
 
-     private static String getLatLong(String city, Context context)
+     private static void getLatLong(String city, Context context)
      {
          if(Geocoder.isPresent()){
              try {
@@ -70,14 +93,12 @@ public class NetworkUltility {
                  List<Address> addresses= gc.getFromLocationName(city, 1); // get the found Address Objects
 
                  if (addresses.isEmpty())
-                     return null;
+                     latLong =  null;
                  else
-                    return addresses.get(0).getLatitude() + "," + addresses.get(0).getLongitude();
+                     latLong = addresses.get(0).getLatitude() + "," + addresses.get(0).getLongitude();
              } catch (IOException e) {
-                 // handle the exception
                  e.printStackTrace();
              }
          }
-         return null;
      }
 }
