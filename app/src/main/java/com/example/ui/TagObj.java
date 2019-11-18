@@ -3,6 +3,8 @@ package com.example.ui;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.json.JSONObject;
+
 public class TagObj implements Parcelable {
 
     private String name;
@@ -67,5 +69,14 @@ public class TagObj implements Parcelable {
         this.name = name;
     }
 
-
+    public JSONObject getJSONObject(){
+        try {
+            JSONObject temp = new JSONObject();
+            temp.put("name", name);
+            temp.put("address", tagAddress);
+            return temp;
+        } catch(Exception e){
+        }
+        return null;
+    }
 }

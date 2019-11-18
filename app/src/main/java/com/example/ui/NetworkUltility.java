@@ -22,21 +22,16 @@ public class NetworkUltility {
 
     public static URL buildURLForWeather(final String cityName, final Context context)
     {
-//       AsyncTask.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//               getLatLong(cityName, context);
-//            }
-//       }).start();
-
-        new Thread( new Runnable() { @Override public void run() {
-            getLatLong(cityName, context);
-        } } ).start();
+       AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+               getLatLong(cityName, context);
+            }
+       });
 
         try {
             //set time in mili
-            Thread.sleep(300);
-
+            Thread.sleep(500);
         }catch (Exception e){
             e.printStackTrace();
         }
