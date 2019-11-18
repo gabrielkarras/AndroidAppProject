@@ -68,7 +68,7 @@
                 android:layout_weight="1"
                 android:text="Feels\nLike"
                 android:textColor="#FFFFFF"
-                android:textSize="7sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 android:typeface="normal"
                 app:fontFamily="@font/roboto_regular" />
