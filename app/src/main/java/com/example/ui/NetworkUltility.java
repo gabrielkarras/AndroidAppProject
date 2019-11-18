@@ -1,5 +1,6 @@
 package com.example.ui;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
@@ -19,25 +20,32 @@ import java.util.Scanner;
 public class NetworkUltility {
     private final static String WEATHER_API_BASE = "https://api.darksky.net/forecast/2c7a7a40eeca1108d7de3964990cb72b/";
     private static String latLong = "";
+    private static String lastLatLong = "";
 
-    public static URL buildURLForWeather(final String cityName, final Context context)
-    {
-       AsyncTask.execute(new Runnable() {
+    public static URL buildURLForWeather(final String cityName, final Context context) {
+        AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-               getLatLong(cityName, context);
+                getLatLong(cityName, context);
             }
-       });
+        });
+        int timeKeeping = 0;
 
-        try {
-            //set time in mili
-            Thread.sleep(500);
-        }catch (Exception e){
-            e.printStackTrace();
+        while ((latLong == "" || latLong.toLowerCase().equals(lastLatLong.toLowerCase())) && timeKeeping <= 1500)
+        {
+            try {
+                //set time in mili
+                //TODO: might cause an issue with other async functions
+                Thread.sleep(10);
+                timeKeeping = timeKeeping +10;
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
 
         Uri buildUri = Uri.parse(WEATHER_API_BASE).buildUpon()
                 .appendPath(latLong).build();
+        lastLatLong = latLong;
 
         URL url = null;
         try
