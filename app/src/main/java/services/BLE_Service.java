@@ -110,6 +110,7 @@ public class BLE_Service extends Service {
                 .setSmallIcon(R.drawable.ic_android_white_24dp)
                 .build();
         startForeground(1,notification);
+
     }
 
     public void startLostNotification(String tagName){

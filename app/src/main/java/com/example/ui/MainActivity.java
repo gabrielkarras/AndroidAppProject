@@ -1,15 +1,24 @@
 package com.example.ui;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,9 +29,12 @@ import fragments.MainMenuFragmentOpen;
 import fragments.SuggestionExplanationClosed;
 import fragments.SuggestionExplanationOpen;
 
+import static com.example.ui.AppName.notificationsEnabled;
 import static com.example.ui.AppName.registeredTags;
 
 public class MainActivity extends AppCompatActivity {
+
+    private final Context currentContext = this;
     private Controller controller;
     private WeatherController WeatherController;
     private FragmentTransaction fragmentTransaction;
@@ -35,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean explanation1_visible;
     public boolean explanation2_visible;
     public boolean explanation3_visible;
+
+    private AlertDialog notificationsDisabled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +110,10 @@ public class MainActivity extends AppCompatActivity {
         sugg3.setTag(R.id.fragment_suggeston_3);
         sugg3.setOnClickListener(controller.suggestion_toggler);
 
+        //Notify user that the notifications for this app are off
+        if (!notificationsEnabled){
+            displayDisabledNotificationsAlert();
+        }
     }
     @Override
     protected void onResume()
@@ -138,11 +156,44 @@ public class MainActivity extends AppCompatActivity {
         startActivity(activity);
     }
 
-    public void openExplanation(int fragment_holder_id){
-        registeredTags.remove(1);
-        registeredTags.add(new TagObj("ZAPAPUSTA","HELLLLLLO"));
+    public void displayDisabledNotificationsAlert(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Notifications Disabled!");
+        builder.setMessage("You wont get daily suggestions and won't be notified about lost tags!");
+        notificationsDisabled = builder.create();
+        notificationsDisabled.setCanceledOnTouchOutside(true);
 
-        AppName.serviceController.updateTrackingTagList(registeredTags);
+        notificationsDisabled.setButton(Dialog.BUTTON_NEGATIVE,"Cancel",new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                notificationsDisabled.dismiss();
+            }
+        });
+
+        notificationsDisabled.setButton(Dialog.BUTTON_POSITIVE,"Change Settings",new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+                Intent intent = new Intent();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+                    intent.putExtra(Settings.EXTRA_APP_PACKAGE, currentContext.getPackageName());
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                    intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+                    intent.putExtra("app_package", currentContext.getPackageName());
+                    intent.putExtra("app_uid", currentContext.getApplicationInfo().uid);
+                } else {
+                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    intent.addCategory(Intent.CATEGORY_DEFAULT);
+                    intent.setData(Uri.parse("package:" + currentContext.getPackageName()));
+                }
+                currentContext.startActivity(intent);
+
+            }
+        });
+
+        notificationsDisabled.show();
+    }
+
+    public void openExplanation(int fragment_holder_id){
         try {
             fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.setCustomAnimations(R.anim.enter_top,R.anim.exit_top);
@@ -154,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void closeExplanation(int fragment_holder_id){
+    public void closeExplanation(){
         try {
             fragmentTransaction = getSupportFragmentManager().beginTransaction();
             // fragmentTransaction.setCustomAnimations(R.anim.enter_right,R.anim.exit_right);
@@ -179,6 +230,18 @@ public class MainActivity extends AppCompatActivity {
                 onResume();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //If notifications enabled schedule next notification alarm
+        if (NotificationManagerCompat.from(this).areNotificationsEnabled()){
+            notificationsEnabled = true;
+        } else {
+            notificationsEnabled = false;
+        }
     }
 }
 
