@@ -33,15 +33,6 @@ public class FetchWeatherDetails extends AsyncTask<URL, Void, String> {
         return weatherSearchResults;
     }
 
-//    @Override
-//    protected void onPostExecute(String weatherSearchResults) {
-//        if(weatherSearchResults != null && !weatherSearchResults.equals(""))
-//        {
-//            Log.i(TAG, "onPostExecute: weatherSearchResults: " + weatherSearchResults);
-//        }
-//        super.onPostExecute(weatherSearchResults);
-//    }
-
     public WeatherForecastInformation parseJSON() {
 
         if(weatherSearchResults != null) {
@@ -57,17 +48,8 @@ public class FetchWeatherDetails extends AsyncTask<URL, Void, String> {
                 double DecimalMinTemp = results.getJSONObject(0).getDouble("temperatureLow");
                 double Wind = results.getJSONObject(0).getDouble("windSpeed");
                 double WindGust = results.getJSONObject(0).getDouble("windGust");
-//                double RainTotal = results.getJSONObject(0).getJSONObject("Day")
-//                        .getJSONObject("Rain").getDouble("Value");
-//                double SnowTotal = results.getJSONObject(0).getJSONObject("Day")
-//                        .getJSONObject("Snow").getDouble("Value");
-                ////TODO: next to change how to process this information
                 String WeatherCondition = results.getJSONObject(0).getString("precipType");
                 String WeatherConditionPhrase = results.getJSONObject(0).getString("summary");
-//                int RainProbability = results.getJSONObject(0).getJSONObject("Day")
-//                        .getInt("RainProbability");
-//                int SnowProbability = results.getJSONObject(0).getJSONObject("Day")
-//                        .getInt("SnowProbability");
 
                 weatherInfo.setMaxtemp(MaxTemp);
                 weatherInfo.setMintemp(MinTemp);
@@ -75,10 +57,6 @@ public class FetchWeatherDetails extends AsyncTask<URL, Void, String> {
                 weatherInfo.setDecimalMintemp(DecimalMinTemp);
                 weatherInfo.setWindSpeed(Wind);
                 weatherInfo.setWindGustSpeed(WindGust);
-//                weatherInfo.setRainTotal(RainTotal);
-//                weatherInfo.setSnowTotal(SnowTotal);
-//                weatherInfo.setGonnaRain(RainProbability);
-//                weatherInfo.setGonnaSnow(SnowProbability);
                 weatherInfo.setWeatherCondition(WeatherCondition);
                 weatherInfo.setWeatherConditionPhrase(WeatherConditionPhrase);
                 return weatherInfo;

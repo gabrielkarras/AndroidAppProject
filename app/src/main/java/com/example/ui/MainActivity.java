@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
         WeatherController = new WeatherController(getApplicationContext(),this);
-        setUpUI();
+        setUpClickToChangeDegreeTypeUI();
 
         if(registeredTags != null || registeredTags.size() != 0){
             AppName.invokeTrackingService();
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setUpUI()
+    private void setUpClickToChangeDegreeTypeUI()
     {
         TextView degrees_main;
         degrees_main = findViewById(R.id.degrees_main);
