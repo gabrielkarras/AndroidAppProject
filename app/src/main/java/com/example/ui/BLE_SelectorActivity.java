@@ -24,8 +24,9 @@ public class BLE_SelectorActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private StringRecyclerAdapter mAdapter;
     private Menu menuInstance;
-    private AlertDialog alert;
     private LinearLayoutManager layoutManager;
+
+    private AlertDialog alert;
 
     //private BLEscanner scanner;
 
@@ -56,11 +57,14 @@ public class BLE_SelectorActivity extends AppCompatActivity {
     }
 
     public void scanForBLE(){
-        alert = new AlertDialog.Builder(this).create();
-        alert.setTitle("Scanning For Nearby Devices");
-        alert.setMessage("Please wait.");
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(BLE_SelectorActivity.this);
+        builder.setTitle("Scanning For Nearby Devices");
+        builder.setMessage("Please wait.");
+        alert = builder.create();
         alert.setCanceledOnTouchOutside(false);
         alert.show();
+
 
         //TODO scan for BLE for 3 seconds in a new thread. or not in a thread. because of alert we can block UI.
         for(int i =0; i<100;i++) {
@@ -68,20 +72,23 @@ public class BLE_SelectorActivity extends AppCompatActivity {
         }
 
         //scanner.startScan();
-//        try{
-//            Thread.sleep(3000);
-//        }catch(Exception e){
-//
-//        }
+        try{
+            Thread.sleep(3000);
+        }catch(Exception e){
+
+        }
         //scanner.stopScan();
 
         alert.dismiss();
+
         if(myDataset != null) {
             mAdapter = new StringRecyclerAdapter(myDataset, this);
             recyclerView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         }
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

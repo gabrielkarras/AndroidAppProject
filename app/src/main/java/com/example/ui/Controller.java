@@ -2,6 +2,7 @@ package com.example.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -75,15 +76,17 @@ public class Controller{
         public void onClick(View item) {
             ((MainActivity)caller_activity).closeMenu();
             int fragment_holder_id = (Integer)item.getTag();
-
             switch((Integer)item.getTag()){
                 case R.id.fragment_suggeston_1:
-
                     if (((MainActivity)caller_activity).explanation1_visible){
                         ((MainActivity)caller_activity).explanation1_visible = false;
-                        ((MainActivity)caller_activity).closeExplanation(fragment_holder_id);
+                        ((MainActivity)caller_activity).closeExplanation();
                     } else {
+
                         ((MainActivity)caller_activity).explanation1_visible = true;
+                        ((MainActivity)caller_activity).explanation2_visible = false;
+                        ((MainActivity)caller_activity).explanation3_visible = false;
+                        ((MainActivity)caller_activity).closeExplanation();
                         ((MainActivity)caller_activity).openExplanation(fragment_holder_id);
                     }
 
@@ -91,9 +94,12 @@ public class Controller{
                 case R.id.fragment_suggeston_2:
                     if (((MainActivity)caller_activity).explanation2_visible){
                         ((MainActivity)caller_activity).explanation2_visible = false;
-                        ((MainActivity)caller_activity). closeExplanation(fragment_holder_id);
+                        ((MainActivity)caller_activity). closeExplanation();
                     } else {
+                        ((MainActivity)caller_activity).explanation1_visible = false;
                         ((MainActivity)caller_activity).explanation2_visible = true;
+                        ((MainActivity)caller_activity).explanation3_visible = false;
+                        ((MainActivity)caller_activity).closeExplanation();
                         ((MainActivity)caller_activity).openExplanation(fragment_holder_id);
                     }
 
@@ -101,9 +107,12 @@ public class Controller{
                 case R.id.fragment_suggeston_3:
                     if (((MainActivity)caller_activity).explanation3_visible){
                         ((MainActivity)caller_activity).explanation3_visible = false;
-                        ((MainActivity)caller_activity).closeExplanation(fragment_holder_id);
+                        ((MainActivity)caller_activity).closeExplanation();
                     } else {
+                        ((MainActivity)caller_activity).explanation1_visible = false;
+                        ((MainActivity)caller_activity).explanation2_visible = false;
                         ((MainActivity)caller_activity).explanation3_visible = true;
+                        ((MainActivity)caller_activity).closeExplanation();
                         ((MainActivity)caller_activity).openExplanation(fragment_holder_id);
                     }
 

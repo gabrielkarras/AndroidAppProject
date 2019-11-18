@@ -1,5 +1,6 @@
 package com.example.ui;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -145,6 +146,7 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
 
             if(deleted_any){
                 AppName.serviceController.updateAndRun(registeredTags);
+                AppName.saveTrackedTagsList();
             }
 
             if(registeredTags.size() == 0){
@@ -162,6 +164,7 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
                 fragmentTransaction.commit();
 
                 AppName.serviceController.stopService();
+                AppName.saveTrackedTagsList();
             }
         }
 
@@ -187,6 +190,7 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
             if( tagNumber >= 0){
                 registeredTags.get(tagNumber).updateFields(data.getString("name").trim());
                 mAdapter.notifyDataSetChanged();
+                AppName.saveTrackedTagsList();
             }
             //Create new record
             else {
@@ -221,6 +225,7 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
             }
 
             AppName.serviceController.updateAndRun(registeredTags);
+            AppName.saveTrackedTagsList();
 
         } catch(JSONException e){
             e.printStackTrace();
