@@ -5,20 +5,20 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.ui.BLE_SelectorActivity;
 import com.example.ui.Controller;
 import com.example.ui.DataLinker;
 import com.example.ui.R;
@@ -30,10 +30,11 @@ import org.json.JSONObject;
 public class TagDialogFragment extends DialogFragment {
 
     private DataLinker dataLinker;
-    private TextView status;
     private EditText name;
-    private EditText id;
-    private Switch switch_button;
+    private TextView address;
+    private TextView discover_link;
+
+    private String selectedDevice;
 
     private boolean createNew = false;
     private String originalName;
@@ -53,11 +54,17 @@ public class TagDialogFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tag_settings_dialog,container,false);
 
-        status = ((TextView)view.findViewById(R.id.tag_status));
         name = ((EditText)view.findViewById(R.id.tag_name_field));
-        id = ((EditText)view.findViewById(R.id.tag_id_value));
-        switch_button = ((Switch)view.findViewById(R.id.tag_buzzer_switch));
+        address = ((TextView)view.findViewById(R.id.tag_address_value));
+        discover_link = ((TextView)view.findViewById(R.id.ble_discovery_link));
 
+        discover_link.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent devicePicker = new Intent(view.getContext(), BLE_SelectorActivity.class);
+                startActivityForResult(devicePicker, 1);
+            }
+        });
 
         Button cancel = ((Button)view.findViewById(R.id.tag_cancel));
         cancel.setTag(this);
@@ -73,19 +80,17 @@ public class TagDialogFragment extends DialogFragment {
             TagObj passedData = (TagObj)(this.getArguments().get("tagVal"));
             createNew = false;
 
-            status.setText(passedData.getStatus());
             name.setText(passedData.getName());
             originalName = passedData.getName();
-            id.setText(Long.toString(passedData.getTagID()));
-            switch_button.setChecked(passedData.isBuzzerEnabled());
-            initiateStatusUpdate();
+            address.setText(passedData.getTagAddress());
+            discover_link.setVisibility(View.INVISIBLE);
         }
 
         //If no data passed, enter tag creation mode and start scanning for closest bluetooth
         else {
             createNew = true;
-            status.setText("Searching For Tags");
-            initiateTagInitializationAttempts();
+            discover_link.setVisibility(View.VISIBLE);
+            address.setText("");
         }
 
         return view;
@@ -97,9 +102,7 @@ public class TagDialogFragment extends DialogFragment {
         try {
             data.put("name", name.getText().toString());
             data.put("originalName", name.getText().toString());
-            data.put("id", Long.parseLong(id.getText().toString()));
-            data.put("buzzable", switch_button.isChecked());
-            data.put("status", status.getText().toString());
+            data.put("address", address.getText().toString());
             data.put("actionItem",(createNew) ? "CREATE":"UPDATE" );
 
         } catch(JSONException e){
@@ -130,8 +133,8 @@ public class TagDialogFragment extends DialogFragment {
 
     public String getErrorReason(JSONObject data){
 
-        if(id.getText()== null || id.getText().length() == 0){
-            return "Tag ID was not detected.";
+        if(address.getText()== null || address.getText().length() == 0){
+            return "Tag Address was not detected.";
         }
 
         if(name.getText()== null || name.getText().length() == 0){
@@ -146,16 +149,10 @@ public class TagDialogFragment extends DialogFragment {
 
     }
 
-    public void initiateStatusUpdate(){
-        //TODO async BLUETOOTH and WIFI tag status reading
-        //TODO update dialog UI
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(resultCode == Activity.RESULT_OK){
+            address.setText(data.getStringExtra("result"));
+        }
     }
-
-
-    public void initiateTagInitializationAttempts(){
-        id.setText("10100001");
-        //TODO async BLUETOOTH scan to get a tag ID.
-
-    }
-
 }

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,10 +24,11 @@ import java.util.ListIterator;
 import fragments.TagDialogFragment;
 import fragments.newTagUserFragment;
 
+import static com.example.ui.AppName.registeredTags;
+
 public class TagsActivity extends AppCompatActivity implements DataLinker {
 
     private Controller controller;
-    private ArrayList<TagObj> myDataset;
     private TagsRecyclerAdapter mAdapter;
 
     private boolean firstTimeUser;
@@ -55,19 +57,15 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
         recyclerView = (RecyclerView) findViewById(R.id.taglist_recycler);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
-        myDataset = new ArrayList<>();
-
-        //TODO retrieve current dataset
-//      myDataset.add(new TagObj("Backpack",1,true));
-//      myDataset.add(new TagObj("Umbrella",2,true));
-//      myDataset.add(new TagObj("Car Keys",3,true));
-
+        if(registeredTags == null) {
+            registeredTags = new ArrayList<>();
+        }
 
         // use a linear layout manager
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        if(myDataset == null || myDataset.size() == 0){
+        if(registeredTags == null || registeredTags.size() == 0){
             firstTimeUser = true;
 
             //Hide list elements
@@ -81,7 +79,7 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
         } else {
 
             // specify an adapter
-            mAdapter = new TagsRecyclerAdapter(myDataset, getApplicationContext(), controller);
+            mAdapter = new TagsRecyclerAdapter(registeredTags, getApplicationContext(), controller);
             recyclerView.setAdapter(mAdapter);
         }
 
@@ -110,7 +108,7 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
 
     public void startSettingsDialogFragment(TagsRecyclerAdapter.MyViewHolder recyclerItemHandler){
         Bundle bundle = new Bundle();
-        bundle.putSerializable("tagVal",myDataset.get(recyclerItemHandler.getAdapterPosition()));
+        bundle.putParcelable("tagVal",registeredTags.get(recyclerItemHandler.getAdapterPosition()));
 
         TagDialogFragment settingsDialog = new TagDialogFragment();
         settingsDialog.setArguments(bundle);
@@ -124,23 +122,32 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
     }
 
     public void deleteSelected(){
+        boolean deleted_any = false;
+        if (registeredTags != null) {
+            boolean changed = false;
 
-        if (myDataset != null) {
-            int counter = 0;
-            Iterator<TagObj> iterator = myDataset.listIterator();
-            while(iterator.hasNext()){
+            do {
+                changed = false;
+                ListIterator<TagObj> iterator = registeredTags.listIterator();
+                while (iterator.hasNext()) {
 
-                TagObj temp = iterator.next();
+                    TagObj temp = iterator.next();
 
-                if (temp.selected){
-                    iterator.remove();
-                    mAdapter.notifyItemRemoved(counter--);
+                    if (temp.selected) {
+                        int rm_item_index = iterator.nextIndex()-1;
+                        iterator.remove();
+                        mAdapter.notifyItemRemoved(rm_item_index);
+                        changed = true;
+                        deleted_any = true;
+                    }
                 }
+            }while(changed);
 
-                counter++;
+            if(deleted_any){
+                AppName.serviceController.updateAndRun(registeredTags);
             }
 
-            if(myDataset.size() == 0){
+            if(registeredTags.size() == 0){
                 firstTimeUser = true;
 
                 //Hide list elements
@@ -153,14 +160,17 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.add(R.id.fragmentcontainer,newUserTag);
                 fragmentTransaction.commit();
+
+                AppName.serviceController.stopService();
             }
         }
+
     }
 
-    private int recordIndex(long id) {
-        ListIterator<TagObj> it = myDataset.listIterator();
+    private int recordIndex(String address) {
+        ListIterator<TagObj> it = registeredTags.listIterator();
         while(it.hasNext()){
-            if (it.next().getTagID() == id){
+            if (it.next().getTagAddress().equals(address)){
                 return it.nextIndex() - 1;
             }
         }
@@ -172,15 +182,17 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
     public void treatData(JSONObject data) {
         try {
             //Check if record exists and update the existing one
-            int tagNumber = recordIndex(data.getLong("id"));
+            int tagNumber  = recordIndex(data.getString("address"));
+
             if( tagNumber >= 0){
-                myDataset.get(tagNumber).updateFields(data.getString("name"), data.getBoolean("buzzable"),data.getString("status"));
+                registeredTags.get(tagNumber).updateFields(data.getString("name").trim());
                 mAdapter.notifyDataSetChanged();
             }
-
             //Create new record
             else {
-                myDataset.add(new TagObj(data.getString("name"),data.getLong("id"),data.getBoolean("buzzable"),data.getString("status")));
+                TagObj temp = new TagObj(data.getString("name").trim(),data.getString("address"));
+                temp.selected = false;
+                registeredTags.add(temp);
 
                 if(firstTimeUser){
                     firstTimeUser = false;
@@ -200,12 +212,15 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
                     });
 
                     // specify an adapter
-                    mAdapter = new TagsRecyclerAdapter(myDataset, getApplicationContext(), controller);
+                    mAdapter = new TagsRecyclerAdapter(registeredTags, this, controller);
                     recyclerView.setAdapter(mAdapter);
+                } else {
 
-                    mAdapter.notifyItemInserted(myDataset.size()-1);
+                    mAdapter.notifyDataSetChanged();
                 }
             }
+
+            AppName.serviceController.updateAndRun(registeredTags);
 
         } catch(JSONException e){
             e.printStackTrace();
@@ -215,15 +230,15 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
     @Override
     public String checkIfConflictsWithDataset(JSONObject data) {
 
-        Iterator<TagObj> iterator = myDataset.iterator();
+        Iterator<TagObj> iterator = registeredTags.iterator();
         try {
             while (iterator.hasNext()) {
                 TagObj temp = iterator.next();
-                if (temp.getTagID() == data.getLong("id") && data.getString("actionItem") != "UPDATE"){
-                    return "Tag ID already registered.";
+                if (temp.getTagAddress().equals(data.getString("address")) && !data.getString("actionItem").equals("UPDATE")){
+                    return "Tag Address already registered.";
                 }
 
-                if (temp.getName().equals(data.getString("name"))){
+                if (temp.getName().equals(data.getString("name").trim())){
                     return "Tag Name already taken.";
                 }
             }

@@ -1,56 +1,70 @@
 package com.example.ui;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class TagObj implements Serializable{
+public class TagObj implements Parcelable {
 
     private String name;
-    private long tagID;
-    private boolean buzzerEnabled;
-    private String status;
-
-    public boolean alarm = false;
+    private String tagAddress;
     public boolean selected = false;
 
-    public TagObj (String name, long ID, boolean buzzerEnabled){
-        this.name = name;
-        this.tagID = ID;
-        this.buzzerEnabled = buzzerEnabled;
-        status = "Unreachable";
 
+    public TagObj (String name, String tagAddress){
+        this.name = name;
+        this.tagAddress = tagAddress;
     }
 
-    public TagObj (String name, long ID, boolean buzzerEnabled, String status){
-        this.name = name;
-        this.tagID = ID;
-        this.buzzerEnabled = buzzerEnabled;
-        this.status = status;
+    public TagObj (Parcel in){
+        this.name = in.readString();
+        this.tagAddress = in.readString();
+        this.selected = in.readInt() != 0 ? true : false;
     }
+
+    private  void readFromParcel (Parcel in){
+        this.name = in.readString();
+        this.tagAddress = in.readString();
+        this.selected = in.readInt() != 0 ? true : false;
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(tagAddress);
+        dest.writeInt(selected ? 1 : 0);
+    }
+
+
+
+    public static final Creator<TagObj> CREATOR = new Creator<TagObj>() {
+        @Override
+        public TagObj createFromParcel(Parcel source) {
+            return new TagObj(source);
+        }
+
+        @Override
+        public TagObj[] newArray(int size) {
+            return new TagObj[size];
+        }
+    };
+
 
     public String getName(){
         return name;
     }
 
-    public long getTagID() {
-        return tagID;
+    public String getTagAddress() {
+        return tagAddress;
     }
 
-    public boolean isBuzzerEnabled() {
-        return buzzerEnabled;
-    }
-
-    public void updateFields(String name, boolean buzzerEnabled, String status ){
+    public void updateFields(String name){
         this.name = name;
-        this.status = status;
-        this.buzzerEnabled = buzzerEnabled;
-    }
-
-    public void updateStatus(String status){
-        this.status = status;
-    }
-
-    public String getStatus() {
-        return status;
     }
 
 

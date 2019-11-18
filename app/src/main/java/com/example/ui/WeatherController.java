@@ -36,11 +36,13 @@ public class WeatherController {
     private Context context;
     private boolean displayFahrenheit = true;
     private DecimalFormat df = new DecimalFormat("#.##");
+    private String lastRequestedCityName = "";
 
     public WeatherController(Context context, AppCompatActivity caller)
     {
         this.context = context;
         caller_activity = caller;
+        setUpDisplayFields();
     }
 
 
@@ -71,13 +73,6 @@ public class WeatherController {
         textField3 = caller_activity.findViewById(R.id.sug3_title);
 
         degrees_main = caller_activity.findViewById(R.id.degrees_main);
-//        degrees_main.setOnClickListener(new View.OnClickListener()
-//        {
-//            @Override
-//            public void onClick(View v) {
-//                switchTempUnit();
-//            }
-//        });
         felt_degress = caller_activity.findViewById(R.id.felt_degress);
         critical_parameter1_desc = caller_activity.findViewById(R.id.critical_parameter1_desc);
         critical_parameter2_desc = caller_activity.findViewById(R.id.critical_parameter2_desc);
@@ -124,8 +119,11 @@ public class WeatherController {
     public void displayWeatherInformation(String city)
     {
         try {
-            setUpDisplayFields();
-            setUpWeatherForecast(city);
+            if (!lastRequestedCityName.toLowerCase().equals(city.toLowerCase()))
+            {
+                setUpWeatherForecast(city);
+                lastRequestedCityName = city;
+            }
 
             if (WeatherForecast != null) {
                 WeatherForecastInformation.WeatherType temp = WeatherForecast.getWeatherType();

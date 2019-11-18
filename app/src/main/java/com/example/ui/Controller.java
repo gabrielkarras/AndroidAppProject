@@ -1,10 +1,12 @@
 package com.example.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -67,6 +69,7 @@ public class Controller{
         }
     };
 
+
     public View.OnClickListener suggestion_toggler = new View.OnClickListener() {
         @Override
         public void onClick(View item) {
@@ -125,44 +128,19 @@ public class Controller{
                     ((MainActivity)caller_activity).startActivity(TagsActivity.class);
                     break;
 
-                case "Catalog":
-                    //TODO Implement catalog
-                    break;
-
                 default:
                     break;
             }
         }
     };
 
-    public View.OnClickListener tag_list_item_selection_listener = new View.OnClickListener() {
+    public CheckBox.OnCheckedChangeListener tag_list_item_selection_listener = new CheckBox.OnCheckedChangeListener() {
         @Override
-        public void onClick(View v) {
-            if(((TagObj)v.getTag()).selected == false){
-                ((TagObj)v.getTag()).selected = true;
-                ((CheckBox)v).setSelected(true);
-            } else {
-                ((TagObj)v.getTag()).selected = false;
-                ((CheckBox)v).setSelected(false);
-            }
-
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            ((TagObj)buttonView.getTag()).selected =isChecked;
         }
     };
 
-    public View.OnClickListener tag_list_item_alarm_listener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-            if(((TagObj)v.getTag()).alarm == false){
-                ((TagObj)v.getTag()).alarm = true;
-                ((ImageButton)v).setForeground(ContextCompat.getDrawable(context, R.drawable.ringing_alarm));
-            } else {
-                ((TagObj)v.getTag()).alarm = false;
-                ((ImageButton)v).setForeground(ContextCompat.getDrawable(context, R.drawable.silent_alarm));
-            }
-
-        }
-    };
 
 
     public void handleOnItemSelected(MenuItem item){

@@ -26,7 +26,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/tag_id_field"
+        android:id="@+id/tag_address_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -38,73 +38,22 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tag_id_label"
+                android:id="@+id/tag_address_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tag ID:" />
+                android:text="Tag Address:" />
 
-            <EditText
-                android:id="@+id/tag_id_value"
+            <TextView
+                android:id="@+id/tag_address_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:layout_marginLeft="5dp"
                 android:enabled="false"
                 android:inputType="textPersonName"
                 android:text="" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tag_id_comment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/buzzer_settings_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="vertical">
-
-        <Switch
-            android:id="@+id/tag_buzzer_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Enable Buzzer" />
-
-        <TextView
-            android:id="@+id/buzzer_switch_desc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Allows activating sound signal remotely." />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/tag_status_holder"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tag_status_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tag Status:" />
-
-        <TextView
-            android:id="@+id/tag_status"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="TextView" />
     </LinearLayout>
 
 </LinearLayout>
