@@ -14,8 +14,9 @@
   ~ limitations under the License.
   -->
 
-<PreferenceScreen
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
 
     <SwitchPreferenceCompat
         app:key="daily_notifications"
@@ -57,5 +58,16 @@
         app:defaultValue="true"
         app:title="Use Celsius"
         app:summary="Use degrees Celsius instead of Fahrenheit"/>
+
+    <androidx.preference.EditTextPreference
+        android:id="@+id/locationEditTextPref"
+        android:defaultValue="Montreal"
+        android:key="location_preference"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        app:useSimpleSummaryProvider="true"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"
+        android:title="Current city: " />
 
 </PreferenceScreen>

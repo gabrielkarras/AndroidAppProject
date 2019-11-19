@@ -54,9 +54,10 @@
                 android:layout_weight="3"
                 android:text="12°C"
                 android:textColor="#FFA200"
-                android:textSize="48sp"
+                android:textSize="35sp"
                 android:textStyle="bold"
                 android:typeface="normal"
+                android:clickable="true"
                 app:fontFamily="@font/roboto_regular" />
 
             <TextView

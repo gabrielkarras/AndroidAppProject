@@ -1,6 +1,11 @@
 package com.example.ui;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.IOException;
@@ -8,19 +13,39 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class NetworkUltility {
-    private final static String WEATHER_API_BASE = "http://dataservice.accuweather.com/forecasts/v1/daily/1day/56186";
-    private final static String API_KEY = "xWh7854v9xS9dAZZkT5LdZ6pLTMCrLlk";
-    private final static String PARAM_API_KEY = "apikey";
-    private final static String PARAM_DETAILS = "details";
+    private final static String WEATHER_API_BASE = "https://api.darksky.net/forecast/2c7a7a40eeca1108d7de3964990cb72b/";
+    private static String latLong = "";
+    private static String lastLatLong = "";
 
-    public static URL buildURLForWeather()
-    {
+    public static URL buildURLForWeather(final String cityName, final Context context) {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                getLatLong(cityName, context);
+            }
+        });
+        int timeKeeping = 0;
+
+        while ((latLong == "" || latLong.toLowerCase().equals(lastLatLong.toLowerCase())) && timeKeeping <= 1500)
+        {
+            try {
+                //set time in mili
+                //TODO: might cause an issue with other async functions
+                Thread.sleep(10);
+                timeKeeping = timeKeeping +10;
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
         Uri buildUri = Uri.parse(WEATHER_API_BASE).buildUpon()
-                .appendQueryParameter(PARAM_API_KEY, API_KEY)
-                .appendQueryParameter(PARAM_DETAILS, "true").build();
+                .appendPath(latLong).build();
+        lastLatLong = latLong;
 
         URL url = null;
         try
@@ -57,6 +82,23 @@ public class NetworkUltility {
          }
          finally {
              urlConnection.disconnect();
+         }
+     }
+
+     private static void getLatLong(String city, Context context)
+     {
+         if(Geocoder.isPresent()){
+             try {
+                 Geocoder gc = new Geocoder(context, Locale.getDefault());
+                 List<Address> addresses= gc.getFromLocationName(city, 1); // get the found Address Objects
+
+                 if (addresses.isEmpty())
+                     latLong =  null;
+                 else
+                     latLong = addresses.get(0).getLatitude() + "," + addresses.get(0).getLongitude();
+             } catch (IOException e) {
+                 e.printStackTrace();
+             }
          }
      }
 }

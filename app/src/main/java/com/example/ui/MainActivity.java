@@ -4,12 +4,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Build;
@@ -17,7 +20,9 @@ import android.os.Bundle;
 
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import fragments.MainMenuFragmentClosed;
 import fragments.MainMenuFragmentOpen;
@@ -52,31 +57,12 @@ public class MainActivity extends AppCompatActivity {
 
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
+        WeatherController = new WeatherController(getApplicationContext(),this);
+        setUpClickToChangeDegreeTypeUI();
 
         if(registeredTags != null && registeredTags.size() != 0){
             AppName.invokeTrackingService();
         }
-     //   WeatherController = new WeatherController(getApplicationContext(),this);
-      //  WeatherController.displayWeatherInformation();
-
-        //TESTING TrackerController
-      //  final TrackerStatusController TrackerController = new TrackerStatusController(getApplicationContext(),this, WeatherController);
-        //TrackerController.checkTrackerActionStatus();
-//
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                while(true){
-//                    try {
-//                        Thread.sleep(1000);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    TrackerController.checkTrackerActionStatus();
-//                }
-//            }
-//        }).start();
-        /////////////////////////////
 
         openMenuFragment = new MainMenuFragmentOpen(controller);
         closedMenuFragment = new MainMenuFragmentClosed(controller);
@@ -204,9 +190,24 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void setUpClickToChangeDegreeTypeUI()
+    {
+        TextView degrees_main;
+        degrees_main = findViewById(R.id.degrees_main);
+        degrees_main.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WeatherController.switchTempUnit();
+                onResume();
+                //reDraw();
+            }
+        });
+    }
+		
     @Override
     protected void onResume() {
         super.onResume();
+		WeatherController.displayWeatherInformation(PreferenceManager.getDefaultSharedPreferences(this).getString("location_preference", "Default"));
 
         //If notifications enabled schedule next notification alarm
         if (NotificationManagerCompat.from(this).areNotificationsEnabled()){
@@ -214,6 +215,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             notificationsEnabled = false;
         }
+    }
+
+    private void reDraw()
+    {
+        WeatherController.displayWeatherInformation(PreferenceManager.getDefaultSharedPreferences(this).getString("location_preference", "Default"));
     }
 }
 
