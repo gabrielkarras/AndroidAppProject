@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
@@ -106,9 +107,31 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
-        if(registeredTags != null && registeredTags.size() != 0){
+        if(registeredTags != null || registeredTags.size() != 0){
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             AppName.invokeTrackingService();
         }
+     //   WeatherController = new WeatherController(getApplicationContext(),this);
+      //  WeatherController.displayWeatherInformation();
+
+        //TESTING TrackerController
+      //  final TrackerStatusController TrackerController = new TrackerStatusController(getApplicationContext(),this, WeatherController);
+        //TrackerController.checkTrackerActionStatus();
+//
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while(true){
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    TrackerController.checkTrackerActionStatus();
+//                }
+//            }
+//        }).start();
+        /////////////////////////////
 
         openMenuFragment = new MainMenuFragmentOpen(controller);
         closedMenuFragment = new MainMenuFragmentClosed(controller);
