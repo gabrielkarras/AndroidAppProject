@@ -1,10 +1,13 @@
 package services;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
 import android.util.Log;
 
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.ui.TagObj;

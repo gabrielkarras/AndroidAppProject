@@ -2,13 +2,17 @@ package services;
 
 import android.app.IntentService;
 import android.app.Notification;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -17,12 +21,17 @@ import com.example.ui.R;
 import com.example.ui.TagObj;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import BluetoothScanner.BLEscanner;
 
 import static com.example.ui.AppName.MANDATORY_NOTIFICATION_CHANNEL__ID;
 import static com.example.ui.AppName.TRACKER_NOTIFICATION_CHANNEL__ID;
 
 
-public class BLE_Service extends IntentService {
+public class BLE_Service extends Service {
+
+    BLEscanner temp;
 
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
@@ -37,10 +46,6 @@ public class BLE_Service extends IntentService {
     private ArrayList<TagObj> targetList; //Supposed to be Tag list
     private ArrayList<TagObj> lostList; //Supposed to be Tag list
 
-    public BLE_Service (){
-        super("BLE_Service");
-        setIntentRedelivery(false);
-    }
 
     @Override
     public void onCreate() {
@@ -55,6 +60,16 @@ public class BLE_Service extends IntentService {
         registerReceiver(receiver, new IntentFilter("UPDATE_TRACKER_SERVICE"));
     }
 
+    public void startScan() {
+        Log.e("DDDD", "STARTED !");
+        temp.startScan(Arrays.asList("3C:71:BF:F1:E4:76"));
+    }
+
+    public void stopScan() {
+        Log.e("DDDD", "STOPPED !");
+        temp.stopScan();
+    }
+
     @Override
     public void onStart(@Nullable Intent intent, int startId) {
         super.onStart(intent, startId);
@@ -62,31 +77,27 @@ public class BLE_Service extends IntentService {
 
 
     @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
+    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
         targetList = intent.getParcelableArrayListExtra("targetArrayList");
+
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Toast.makeText(this, "BLE not supported!", Toast.LENGTH_SHORT).show();
+            //QUIT THE APP
+        }
+
+        temp = new BLEscanner(this);
+        try {
+            Thread.sleep(500);
+        }catch (java.lang.InterruptedException e){
+            Log.d("interupted","sleep");
+        }
+        startScan();
         //TODO scan for BLE devices
         // IF device in lost list, add it to target list.
         // IF device not found for more than N scans, put it into lost list from targetList.
         // INVOKE startLostNotification() or startFoundNotification()
 
-        /// PLEASE DELTE THIS, ITS JUST FOR DEMO
-        int pongo = 0;
-        while(pongo < 100){
-            try {
-                if(pongo == 50){
-                    startLostNotification(targetList.get(0).getName());
-                }
-
-                if(pongo == 90){
-                    startFoundNotification(targetList.get(1).getName());
-                }
-
-                Thread.sleep(1000);
-                pongo++;
-            } catch(Exception e){
-               // e.printStackTrace();
-            }
-        }
+        return START_STICKY;
     }
 
     public void startMandatoryNotification(){
@@ -131,7 +142,14 @@ public class BLE_Service extends IntentService {
     @Override
     public void onDestroy() {
         unregisterReceiver(receiver);
+        Log.e("SERVICE BLE", "Service STOPED");
         super.onDestroy();
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
 }

@@ -3,6 +3,7 @@ package com.example.ui;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if(registeredTags != null || registeredTags.size() != 0){
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             AppName.invokeTrackingService();
         }
      //   WeatherController = new WeatherController(getApplicationContext(),this);

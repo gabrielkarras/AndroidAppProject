@@ -1,15 +1,21 @@
 package com.example.ui;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +32,8 @@ public class BLE_SelectorActivity extends AppCompatActivity {
     private Menu menuInstance;
     private AlertDialog alert;
     private LinearLayoutManager layoutManager;
+
+    private TextView debug;
 
     //private BLEscanner scanner;
 
@@ -50,9 +58,12 @@ public class BLE_SelectorActivity extends AppCompatActivity {
 
         myDataset = new ArrayList<String>();
 
+        debug = findViewById(R.id.gebugText);
        // scanner = new BLEscanner(this);
         Log.e("AAAA","IM HERE");
         scanForBLE();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                new IntentFilter("update-UI-gatt"));
     }
 
     public void scanForBLE(){
@@ -100,6 +111,16 @@ public class BLE_SelectorActivity extends AppCompatActivity {
         }
         return true;
     }
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            String message = intent.getStringExtra("message");
+            Log.d("receiver", "Got message: " + message);
+            debug.setText(message);
+        }
+    };
 
     public void finishActivity(String address){
         Intent returnIntent = new Intent();
