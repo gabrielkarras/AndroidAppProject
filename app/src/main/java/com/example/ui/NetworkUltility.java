@@ -31,6 +31,14 @@ public class NetworkUltility {
         });
         int timeKeeping = 0;
 
+        if (latLong == null){
+            latLong = "";
+        }
+
+        if(lastLatLong == null){
+            lastLatLong = "";
+        }
+
         while ((latLong == "" || latLong.toLowerCase().equals(lastLatLong.toLowerCase())) && timeKeeping <= 1500)
         {
             try {
@@ -43,8 +51,7 @@ public class NetworkUltility {
             }
         }
 
-        Uri buildUri = Uri.parse(WEATHER_API_BASE).buildUpon()
-                .appendPath(latLong).build();
+        Uri buildUri = Uri.parse(WEATHER_API_BASE).buildUpon().appendPath(latLong).appendQueryParameter("exclude","minutely,hourly,flags,alerts").build();
         lastLatLong = latLong;
 
         URL url = null;
@@ -93,7 +100,8 @@ public class NetworkUltility {
                  List<Address> addresses= gc.getFromLocationName(city, 1); // get the found Address Objects
 
                  if (addresses.isEmpty())
-                     latLong =  null;
+                     //TODO add current device GPS coords instead of hardcoded
+                     latLong =  "45.5036,-73.5527";
                  else
                      latLong = addresses.get(0).getLatitude() + "," + addresses.get(0).getLongitude();
              } catch (IOException e) {

@@ -27,6 +27,13 @@ public class WeatherForecastInformation {
     public String[] ChillingWeatherItems = {"Jacket", "Warm Shoes", "Scarf"};
     public String[] WarmWeatherItems = {"T-shirt", "Light Shoes", "Shorts"};
 
+    private Long forecastTime;
+    private String iconString;
+    private double humidity;
+    private double visibility;
+    private String date;
+    private String dayOfWeek;
+
     public WeatherForecastInformation.WeatherCondition getWeatherCondition() {
         return WeatherCondition;
     }
@@ -170,5 +177,54 @@ public class WeatherForecastInformation {
             return WeatherType.WARM;
         }
 
+    }
+
+
+    public Long getForecastTime() {
+        return forecastTime;
+    }
+
+    public void setForecastTime(Long forecastTime) {
+        this.forecastTime = forecastTime;
+    }
+
+    public String getIconString() {
+        return iconString;
+    }
+
+    public void setIconString(String iconString) {
+        this.iconString = iconString;
+    }
+
+    public double getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(double humidity) {
+        this.humidity = humidity;
+    }
+
+    public double getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(double visibility) {
+        this.visibility = visibility;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getDayOfWeek() {
+        return dayOfWeek;
+    }
+
+    public void setDayOfWeek(String dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
     }
 }

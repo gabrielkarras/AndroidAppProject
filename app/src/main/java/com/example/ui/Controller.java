@@ -1,17 +1,12 @@
 package com.example.ui;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import fragments.TagDialogFragment;
@@ -70,6 +65,20 @@ public class Controller{
         }
     };
 
+    public View.OnClickListener weeklyforecast_bttn_click = new View.OnClickListener() {
+        @Override
+        public void onClick(View item) {
+            ((MainActivity)caller_activity).openWeeklyForecast();
+        }
+    };
+
+    public  View.OnClickListener setUpClickToChangeDegreeTypeUI =  new View.OnClickListener() {
+        @Override
+        public void onClick(View item) {
+           // ((MainActivity)caller_activity).WeatherController.switchTempUnit();
+            ((MainActivity)caller_activity).onResume();
+        }
+    };
 
     public View.OnClickListener suggestion_toggler = new View.OnClickListener() {
         @Override
@@ -149,7 +158,6 @@ public class Controller{
             ((TagObj)buttonView.getTag()).selected =isChecked;
         }
     };
-
 
 
     public void handleOnItemSelected(MenuItem item){

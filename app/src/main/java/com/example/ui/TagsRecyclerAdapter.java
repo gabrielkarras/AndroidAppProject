@@ -1,6 +1,7 @@
 package com.example.ui;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapter.MyViewHolder> {
     private ArrayList<TagObj> TagDataset;
@@ -39,11 +41,6 @@ public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapte
         this.controller = controller;
     }
 
-    @Override
-    public void onViewRecycled(@NonNull MyViewHolder holder) {
-        super.onViewRecycled(holder);
-        holder.selected.setChecked(false);
-    }
 
     // Create new views (invoked by the layout manager)
     @Override
@@ -61,18 +58,14 @@ public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
+
         holder.label.setText(TagDataset.get(position).getName());
-
         holder.selected.setTag(TagDataset.get(position));
-
-        holder.selected.setSelected(TagDataset.get(position).selected);
+        holder.selected.setChecked(TagDataset.get(position).selected);
         holder.selected.setOnCheckedChangeListener(controller.tag_list_item_selection_listener);
-
         holder.label.setOnClickListener(controller.tag_settings_dialog);
 
     }
-
-
 
     public void itemRemoved(int id){
         this.TagDataset.remove(id);

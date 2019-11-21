@@ -1,33 +1,36 @@
 package com.example.ui;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.preference.PreferenceManager;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.ResultReceiver;
 import android.provider.Settings;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import fragments.DailyForecastFragment;
 import fragments.MainMenuFragmentClosed;
 import fragments.MainMenuFragmentOpen;
 import fragments.SuggestionExplanationClosed;
 import fragments.SuggestionExplanationOpen;
+import fragments.WeeklyForecastFragment;
+import services.ForecastService;
 
 import static com.example.ui.AppName.notificationsEnabled;
 import static com.example.ui.AppName.registeredTags;
@@ -36,10 +39,12 @@ public class MainActivity extends AppCompatActivity {
 
     private final Context currentContext = this;
     private Controller controller;
-    private WeatherController WeatherController;
+    public WeatherController weatherController;
     private FragmentTransaction fragmentTransaction;
     private MainMenuFragmentOpen openMenuFragment;
     private MainMenuFragmentClosed closedMenuFragment;
+    public DailyForecastFragment dailyForecastFragment;
+    public WeeklyForecastFragment weeklyForecastFragment;
 
     private SuggestionExplanationOpen openSuggestionFragment;
     private SuggestionExplanationClosed closedSuggestionFragment;
@@ -47,18 +52,59 @@ public class MainActivity extends AppCompatActivity {
     public boolean explanation1_visible;
     public boolean explanation2_visible;
     public boolean explanation3_visible;
+    public boolean weeklyForecastVisible;
 
     private AlertDialog notificationsDisabled;
+    private ForecastResultReceiver resultReceiver;
+
+    private String currentLocation = "Montreal";
+    public int forecastDayOffset = 0;
+
+    private class ForecastResultReceiver extends ResultReceiver {
+
+        public ForecastResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            if (resultData == null) {
+                return;
+            }
+
+            try{
+                weatherController.updateWeatherInfo(new JSONObject(resultData.getString("JSONString")));
+            } catch(JSONException exc){
+
+            }
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         controller = new Controller(getApplicationContext(),this);
 
+        dailyForecastFragment = new DailyForecastFragment(this,controller);
+
+        JSONArray arrya = new JSONArray();
+        for(int i =0; i< 7;i++){
+            JSONObject ttmp = new JSONObject();
+            try {
+                ttmp.put("day", "Monday");
+                ttmp.put("date", "14/11/2019");
+                ttmp.put("summary", "Game Over ppl...");
+                ttmp.put("temperature", "66666");
+            }catch(Exception e){
+
+            }
+            arrya.put(ttmp);
+        }
+        weeklyForecastFragment = new WeeklyForecastFragment(this,arrya);
+
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
-        WeatherController = new WeatherController(getApplicationContext(),this);
-        setUpClickToChangeDegreeTypeUI();
 
         if(registeredTags != null && registeredTags.size() != 0){
             AppName.invokeTrackingService();
@@ -70,11 +116,13 @@ public class MainActivity extends AppCompatActivity {
         openSuggestionFragment = new SuggestionExplanationOpen();
         closedSuggestionFragment = new SuggestionExplanationClosed();
 
+        openDailyForecast();
         closeMenu();
 
-        findViewById(R.id.daily_forecast_fragment).setOnClickListener(controller.outbounds_click);
+       // dailyForecastFragment.mainTemp.setOnClickListener(controller.outbounds_click);
         findViewById(R.id.weather_bar).setOnClickListener(controller.outbounds_click);
         findViewById(R.id.menu_wrapper).setOnClickListener(controller.outbounds_click);
+        findViewById(R.id.weekly_forecast).setOnClickListener(controller.weeklyforecast_bttn_click);
 
         Button sugg1 = findViewById(R.id.suggestion_bttn1);
         sugg1.setTag(R.id.fragment_suggeston_1);
@@ -92,6 +140,17 @@ public class MainActivity extends AppCompatActivity {
         if (!notificationsEnabled){
             displayDisabledNotificationsAlert();
         }
+
+        weatherController = new WeatherController(getApplicationContext(),this);
+        resultReceiver = new ForecastResultReceiver(new Handler(Looper.getMainLooper()));
+        startForecastService();
+    }
+
+    private void startForecastService() {
+        Intent intent = new Intent(this, ForecastService.class);
+        intent.putExtra("receiver",resultReceiver);
+        intent.putExtra("location", currentLocation);
+        startService(intent);
     }
 
     public void openMenu(){
@@ -190,24 +249,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setUpClickToChangeDegreeTypeUI()
-    {
-        TextView degrees_main;
-        degrees_main = findViewById(R.id.degrees_main);
-        degrees_main.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                WeatherController.switchTempUnit();
-                onResume();
-                //reDraw();
-            }
-        });
-    }
-		
     @Override
     protected void onResume() {
         super.onResume();
-		WeatherController.displayWeatherInformation(PreferenceManager.getDefaultSharedPreferences(this).getString("location_preference", "Default"));
+        //weatherController.displayWeatherInformation(PreferenceManager.getDefaultSharedPreferences(this).getString("location_preference", "Default"));
 
         //If notifications enabled schedule next notification alarm
         if (NotificationManagerCompat.from(this).areNotificationsEnabled()){
@@ -217,9 +262,50 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void openDailyForecast(){
+        try {
+            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.anim.enter_top,R.anim.exit_top);
+            fragmentTransaction.add(R.id.forecast_holder, dailyForecastFragment);
+            fragmentTransaction.commit();
+            getSupportFragmentManager().executePendingTransactions();
+        }catch (Exception e){
+
+        }
+    }
+
+    public void openWeeklyForecast(){
+        closeMenu();
+        if(weeklyForecastVisible){
+            weeklyForecastVisible = false;
+            try {
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.enter_top,R.anim.exit_top);
+                fragmentTransaction.remove(weeklyForecastFragment);
+                fragmentTransaction.add(R.id.forecast_holder, dailyForecastFragment);
+                fragmentTransaction.commit();
+                getSupportFragmentManager().executePendingTransactions();
+            }catch (Exception e){
+
+            }
+        } else {
+            weeklyForecastVisible = true;
+            try {
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.enter_top,R.anim.exit_top);
+                fragmentTransaction.remove(dailyForecastFragment);
+                fragmentTransaction.add(R.id.forecast_holder, weeklyForecastFragment);
+                fragmentTransaction.commit();
+                getSupportFragmentManager().executePendingTransactions();
+            }catch (Exception e){
+
+            }
+        }
+    }
+
     private void reDraw()
     {
-        WeatherController.displayWeatherInformation(PreferenceManager.getDefaultSharedPreferences(this).getString("location_preference", "Default"));
+       // weatherController.displayWeatherInformation(PreferenceManager.getDefaultSharedPreferences(this).getString("location_preference", "Default"));
     }
 }
 

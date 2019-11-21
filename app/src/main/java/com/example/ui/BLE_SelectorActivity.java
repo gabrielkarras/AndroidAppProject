@@ -68,15 +68,10 @@ public class BLE_SelectorActivity extends AppCompatActivity {
 
         //TODO scan for BLE for 3 seconds in a new thread. or not in a thread. because of alert we can block UI.
         for(int i =0; i<100;i++) {
-            myDataset.add("AAA:DDD:AA:D" + ((int) (Math.random() * 10)));
+            myDataset.add("AAA:DDD:AA:" + ((int) (Math.random() * 10))+""+ ((int) (Math.random() * 10))+""+ ((int) (Math.random() * 10)));
         }
 
         //scanner.startScan();
-        try{
-            Thread.sleep(3000);
-        }catch(Exception e){
-
-        }
         //scanner.stopScan();
 
         alert.dismiss();

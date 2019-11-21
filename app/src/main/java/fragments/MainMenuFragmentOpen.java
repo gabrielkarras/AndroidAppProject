@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +31,7 @@ public class MainMenuFragmentOpen extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_menu_fragment_open,container,false);
+        view.findViewById(R.id.main_menu_closed_bttn).setOnClickListener(controller.outbounds_click);
         view.findViewById(R.id.tags_bttn).setOnClickListener(controller.menu_item_click);
         view.findViewById(R.id.settings_bttn).setOnClickListener(controller.menu_item_click);
         return view;
