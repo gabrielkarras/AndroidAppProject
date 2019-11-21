@@ -16,20 +16,21 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.ui.R;
 import com.example.ui.TagObj;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import BluetoothScanner.BLEscanner;
 
 import static com.example.ui.AppName.MANDATORY_NOTIFICATION_CHANNEL__ID;
 import static com.example.ui.AppName.TRACKER_NOTIFICATION_CHANNEL__ID;
 
-
-public class BLE_Service extends Service {
+public class BLE_Service extends Service{
 
     BLEscanner temp;
 
@@ -60,9 +61,14 @@ public class BLE_Service extends Service {
         registerReceiver(receiver, new IntentFilter("UPDATE_TRACKER_SERVICE"));
     }
 
-    public void startScan() {
+    public void startScan(ArrayList<TagObj> registeredTags) {
         Log.e("DDDD", "STARTED !");
-        temp.startScan(Arrays.asList("3C:71:BF:F1:E4:76"));
+        List<String> tagAdressList = new ArrayList<>();
+        for (TagObj tag: registeredTags) {
+            tagAdressList.add(tag.getTagAddress());
+        }
+        temp.startScan(tagAdressList);
+        //3C:71:BF:F1:E4:76
     }
 
     public void stopScan() {
@@ -91,7 +97,9 @@ public class BLE_Service extends Service {
         }catch (java.lang.InterruptedException e){
             Log.d("interupted","sleep");
         }
-        startScan();
+        startScan(targetList);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                new IntentFilter("update-UI-gatt"));
         //TODO scan for BLE devices
         // IF device in lost list, add it to target list.
         // IF device not found for more than N scans, put it into lost list from targetList.
@@ -144,8 +152,21 @@ public class BLE_Service extends Service {
     public void onDestroy() {
         unregisterReceiver(receiver);
         Log.e("SERVICE BLE", "Service STOPED");
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
         super.onDestroy();
     }
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            String message = intent.getStringExtra("message");
+            Log.d("receiver", "Got message: " + message);
+            if (message.contains("moving")){ // if moving message received stop service (cut notification)
+                stopSelf();
+            }
+        }
+    };
 
     @Nullable
     @Override
