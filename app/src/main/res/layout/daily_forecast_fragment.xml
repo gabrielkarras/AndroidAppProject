@@ -59,7 +59,6 @@
                 android:textSize="35sp"
                 android:textStyle="bold"
                 android:typeface="normal"
-                android:clickable="true"
                 app:fontFamily="@font/roboto_regular" />
 
             <TextView

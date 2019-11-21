@@ -30,24 +30,31 @@
             android:background="#A3FFFFFF"
             android:orientation="horizontal">
 
-            <AutoCompleteTextView
-                android:id="@+id/autoCompleteTextView"
+            <TextView
+                android:id="@+id/city_txt_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:layout_weight="1"
-                android:paddingLeft="10dp"
-                android:text="Montreal"
-                android:textSize="16sp" />
+                android:layout_weight="3" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/date_txt_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
+                android:paddingStart="10dp"
                 android:text="Monday, 11/11/2019"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/number_of_tracked_tags"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:paddingEnd="10dp"
+                android:text="Tracked Tags: 0"
+                android:textAlignment="textEnd" />
+
         </LinearLayout>
 
         <FrameLayout

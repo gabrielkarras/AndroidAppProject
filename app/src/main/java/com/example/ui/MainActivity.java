@@ -91,8 +91,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private AlertDialog notificationsDisabled;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,32 +122,6 @@ public class MainActivity extends AppCompatActivity {
                 AppName.invokeTrackingService();
             }
         }
-     //   WeatherController = new WeatherController(getApplicationContext(),this);
-      //  WeatherController.displayWeatherInformation();
-
-        //TESTING TrackerController
-      //  final TrackerStatusController TrackerController = new TrackerStatusController(getApplicationContext(),this, WeatherController);
-        //TrackerController.checkTrackerActionStatus();
-//
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                while(true){
-//                    try {
-//                        Thread.sleep(1000);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    TrackerController.checkTrackerActionStatus();
-//                }
-//            }
-//        }).start();
-        /////////////////////////////
-        WeatherController = new WeatherController(getApplicationContext(),this);
-        setUpUI();
-
-        //WeatherController = new WeatherController(getApplicationContext(),this);
-        //WeatherController.displayWeatherInformation(PreferenceManager.getDefaultSharedPreferences(this).getString("location_preference", "Default"));
 
         openMenuFragment = new MainMenuFragmentOpen(controller);
         closedMenuFragment = new MainMenuFragmentClosed(controller);
@@ -182,24 +154,12 @@ public class MainActivity extends AppCompatActivity {
             displayDisabledNotificationsAlert();
         }
     }
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        if(registeredTags != null || registeredTags.size() != 0){
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                AppName.invokeTrackingService();
-            }
-        }
-        WeatherController.displayWeatherInformation(PreferenceManager.getDefaultSharedPreferences(this).getString("location_preference", "Default"));
-    }
+
 
     public void openMenu(){
         try {
             fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.setCustomAnimations(R.anim.enter_right,R.anim.exit_right);
-            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.replace(R.id.menu_holder_fragment,openMenuFragment);
             fragmentTransaction.commit();
             getSupportFragmentManager().executePendingTransactions();
@@ -315,6 +275,8 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+
 
     public void openWeeklyForecast(){
         closeMenu();

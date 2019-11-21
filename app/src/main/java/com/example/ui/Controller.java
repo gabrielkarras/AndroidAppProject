@@ -162,8 +162,10 @@ public class Controller{
     };
 
 
-    public void handleOnItemSelected(MenuItem item){
 
+
+    public void handleOnItemSelected(MenuItem item){
+        Log.e("AAAAAAA","herer");
         if(item.getItemId() == 16908332){//Handle return
             caller_activity.finish();
         }
