@@ -1,6 +1,8 @@
 package com.example.ui;
 
+import android.Manifest;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -60,6 +62,10 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
 
         if(registeredTags == null) {
             registeredTags = new ArrayList<>();
+        }else{
+            if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            }
         }
 
         // use a linear layout manager
@@ -89,6 +95,9 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menuInstance = menu;
+        if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
         getMenuInflater().inflate(R.menu.tags_menu,menu);
 
         //Hide menu options if first time creation screen

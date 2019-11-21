@@ -15,6 +15,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -61,7 +62,9 @@ public class MainActivity extends AppCompatActivity {
 
         if(registeredTags != null || registeredTags.size() != 0){
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            AppName.invokeTrackingService();
+            if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                AppName.invokeTrackingService();
+            }
         }
      //   WeatherController = new WeatherController(getApplicationContext(),this);
       //  WeatherController.displayWeatherInformation();
@@ -234,6 +237,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /*
     @Override
     protected void onResume() {
         super.onResume();
@@ -245,6 +249,7 @@ public class MainActivity extends AppCompatActivity {
             notificationsEnabled = false;
         }
     }
+*/
 
     private void reDraw()
     {
