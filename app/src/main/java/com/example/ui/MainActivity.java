@@ -134,8 +134,9 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        }).start();
         /////////////////////////////
-        WeatherController = new WeatherController(getApplicationContext(),this);
-        WeatherController.displayWeatherInformation(PreferenceManager.getDefaultSharedPreferences(this).getString("location_preference", "Default"));
+
+        //WeatherController = new WeatherController(getApplicationContext(),this);
+        //WeatherController.displayWeatherInformation(PreferenceManager.getDefaultSharedPreferences(this).getString("location_preference", "Default"));
 
         openMenuFragment = new MainMenuFragmentOpen(controller);
         closedMenuFragment = new MainMenuFragmentClosed(controller);

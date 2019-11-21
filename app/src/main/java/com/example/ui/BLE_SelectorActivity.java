@@ -122,7 +122,6 @@ public class BLE_SelectorActivity extends AppCompatActivity {
             // Get extra data included in the Intent
             String message = intent.getStringExtra("message");
             Log.d("receiver", "Got message: " + message);
-            debug.setText(message);
         }
     };
 
