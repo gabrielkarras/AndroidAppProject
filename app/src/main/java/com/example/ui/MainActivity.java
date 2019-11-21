@@ -1,5 +1,6 @@
 package com.example.ui;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.FragmentTransaction;
@@ -7,12 +8,14 @@ import androidx.preference.PreferenceManager;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,7 +24,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.ResultReceiver;
 import android.provider.Settings;
+import android.provider.Settings;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -84,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private AlertDialog notificationsDisabled;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,7 +120,9 @@ public class MainActivity extends AppCompatActivity {
 
         if(registeredTags != null || registeredTags.size() != 0){
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            AppName.invokeTrackingService();
+            if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                AppName.invokeTrackingService();
+            }
         }
      //   WeatherController = new WeatherController(getApplicationContext(),this);
       //  WeatherController.displayWeatherInformation();
@@ -134,6 +145,8 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        }).start();
         /////////////////////////////
+        WeatherController = new WeatherController(getApplicationContext(),this);
+        setUpUI();
 
         //WeatherController = new WeatherController(getApplicationContext(),this);
         //WeatherController.displayWeatherInformation(PreferenceManager.getDefaultSharedPreferences(this).getString("location_preference", "Default"));
@@ -168,17 +181,18 @@ public class MainActivity extends AppCompatActivity {
         if (!notificationsEnabled){
             displayDisabledNotificationsAlert();
         }
-
-        weatherController = new WeatherController(getApplicationContext(),this);
-        resultReceiver = new ForecastResultReceiver(new Handler(Looper.getMainLooper()));
-        startForecastService();
     }
-
-    private void startForecastService() {
-        Intent intent = new Intent(this, ForecastService.class);
-        intent.putExtra("receiver",resultReceiver);
-        intent.putExtra("location", currentLocation);
-        startService(intent);
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        if(registeredTags != null || registeredTags.size() != 0){
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                AppName.invokeTrackingService();
+            }
+        }
+        WeatherController.displayWeatherInformation(PreferenceManager.getDefaultSharedPreferences(this).getString("location_preference", "Default"));
     }
 
     public void openMenu(){
@@ -336,4 +350,3 @@ public class MainActivity extends AppCompatActivity {
        // weatherController.displayWeatherInformation(PreferenceManager.getDefaultSharedPreferences(this).getString("location_preference", "Default"));
     }
 }
-

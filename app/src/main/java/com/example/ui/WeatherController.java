@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import java.net.URL;
+import java.text.DecimalFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

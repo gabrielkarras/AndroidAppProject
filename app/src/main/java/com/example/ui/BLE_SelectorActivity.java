@@ -57,6 +57,7 @@ public class BLE_SelectorActivity extends AppCompatActivity {
 
         myDataset = new ArrayList<String>();
 
+        debug = findViewById(R.id.gebugText);
        // scanner = new BLEscanner(this);
         Log.e("AAAA","IM HERE");
         scanForBLE();
