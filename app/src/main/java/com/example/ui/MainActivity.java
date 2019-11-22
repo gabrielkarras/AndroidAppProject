@@ -25,14 +25,23 @@ import android.os.Looper;
 import android.os.ResultReceiver;
 import android.provider.Settings;
 import android.provider.Settings;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.google.android.material.tabs.TabLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import fragments.DailyForecastFragment;
 import fragments.MainMenuFragmentClosed;
@@ -66,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AlertDialog notificationsDisabled;
     private ForecastResultReceiver resultReceiver;
+    private TextView numberOfActiveTags;
 
     private String currentLocation = "Montreal";
     public int forecastDayOffset = 0;
@@ -81,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
             if (resultData == null) {
                 return;
             }
-
             try{
                 weatherController.updateWeatherInfo(new JSONObject(resultData.getString("JSONString")));
             } catch(JSONException exc){
@@ -90,29 +99,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         controller = new Controller(getApplicationContext(),this);
-
-        dailyForecastFragment = new DailyForecastFragment(this,controller);
-
-        JSONArray arrya = new JSONArray();
-        for(int i =0; i< 7;i++){
-            JSONObject ttmp = new JSONObject();
-            try {
-                ttmp.put("day", "Monday");
-                ttmp.put("date", "14/11/2019");
-                ttmp.put("summary", "Game Over ppl...");
-                ttmp.put("temperature", "66666");
-            }catch(Exception e){
-
-            }
-            arrya.put(ttmp);
-        }
-        weeklyForecastFragment = new WeeklyForecastFragment(this,arrya);
-
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
@@ -129,10 +119,8 @@ public class MainActivity extends AppCompatActivity {
         openSuggestionFragment = new SuggestionExplanationOpen();
         closedSuggestionFragment = new SuggestionExplanationClosed();
 
-        openDailyForecast();
-        closeMenu();
+        numberOfActiveTags = findViewById(R.id.number_of_tracked_tags);
 
-       // dailyForecastFragment.mainTemp.setOnClickListener(controller.outbounds_click);
         findViewById(R.id.weather_bar).setOnClickListener(controller.outbounds_click);
         findViewById(R.id.menu_wrapper).setOnClickListener(controller.outbounds_click);
         findViewById(R.id.weekly_forecast).setOnClickListener(controller.weeklyforecast_bttn_click);
@@ -149,12 +137,60 @@ public class MainActivity extends AppCompatActivity {
         sugg3.setTag(R.id.fragment_suggeston_3);
         sugg3.setOnClickListener(controller.suggestion_toggler);
 
+        RelativeLayout backgrounImgOwner = findViewById(R.id.static_weather_holder);
+        backgrounImgOwner.setBackgroundResource(getBackgroundFromDate());
+
         //Notify user that the notifications for this app are off
         if (!notificationsEnabled){
             displayDisabledNotificationsAlert();
         }
+
+
+        weatherController = new WeatherController(getApplicationContext(),this);
+        dailyForecastFragment = new DailyForecastFragment(this,weatherController);
+        weeklyForecastFragment = new WeeklyForecastFragment(this);
+
+        resultReceiver = new ForecastResultReceiver(new Handler(Looper.getMainLooper()));
+        startForecastService();
+
+        openDailyForecast();
+        closeMenu();
+    }
+    public void setSuggestionExplanation(String explanation){
+        openSuggestionFragment.updateTxt(explanation);
+    }
+    private int getBackgroundFromDate(){
+
+        int month = Integer.parseInt(""+DateFormat.format("MM",new Date()));
+        switch(month){
+            case 12:
+            case 1:
+            case 2:
+                return R.drawable.winter;
+            case 3:
+            case 4:
+            case 5:
+                return R.drawable.spring;
+            case 6:
+            case 7:
+            case 8:
+                return R.drawable.summer;
+            case 9:
+            case 10:
+            case 11:
+                return R.drawable.autumn;
+            default:
+                break;
+        }
+        return R.drawable.winter;
     }
 
+    private void startForecastService() {
+        Intent intent = new Intent(this, ForecastService.class);
+        intent.putExtra("receiver",resultReceiver);
+        intent.putExtra("location", currentLocation);
+        startService(intent);
+    }
 
     public void openMenu(){
         try {
@@ -254,6 +290,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        currentLocation = getSharedPreferences(this.getPackageName() + "_preferences", MODE_PRIVATE).getString("location_preference","Montreal");
+
+        //Get new updated daily forecast
+        if(resultReceiver != null) {
+            startForecastService();
+        }
+
+        //Update display of tracked tags
+        if (numberOfActiveTags != null){
+            try{
+                JSONArray jsonArray = new JSONArray(getSharedPreferences("forecasterAppTrackerList",Context.MODE_PRIVATE).getString("JSONTagArray",""));
+                numberOfActiveTags.setText("Tags: "+jsonArray.length());
+            } catch(JSONException e){
+                e.printStackTrace();
+            }
+        }
+
         //weatherController.displayWeatherInformation(PreferenceManager.getDefaultSharedPreferences(this).getString("location_preference", "Default"));
 
         //If notifications enabled schedule next notification alarm
@@ -272,16 +326,15 @@ public class MainActivity extends AppCompatActivity {
             fragmentTransaction.commit();
             getSupportFragmentManager().executePendingTransactions();
         }catch (Exception e){
-
+            e.printStackTrace();
         }
     }
 
-
-
-    public void openWeeklyForecast(){
+    public void toggleWeeklyForecast(){
         closeMenu();
         if(weeklyForecastVisible){
             weeklyForecastVisible = false;
+
             try {
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.enter_top,R.anim.exit_top);
@@ -290,8 +343,9 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
             }catch (Exception e){
-
+                e.printStackTrace();
             }
+
         } else {
             weeklyForecastVisible = true;
             try {
@@ -302,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
             }catch (Exception e){
-
+                e.printStackTrace();
             }
         }
     }

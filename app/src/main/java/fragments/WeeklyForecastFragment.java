@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ui.MainActivity;
 import com.example.ui.R;
 import com.example.ui.StringRecyclerAdapter;
 import com.example.ui.WeeklyItemsAdapter;
@@ -36,6 +37,12 @@ public class WeeklyForecastFragment extends Fragment {
         this.context = context;
     }
 
+    public WeeklyForecastFragment(Context context) {
+        super();
+        this.weeklyforecast = new JSONArray();
+        this.context = context;
+    }
+
 
     @Nullable
     @Override
@@ -48,7 +55,7 @@ public class WeeklyForecastFragment extends Fragment {
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.HORIZONTAL));
 
         if(weeklyforecast != null) {
-            adapter = new WeeklyItemsAdapter(weeklyforecast, context);
+            adapter = new WeeklyItemsAdapter(weeklyforecast, ((MainActivity)context).weatherController);
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         }
@@ -57,10 +64,13 @@ public class WeeklyForecastFragment extends Fragment {
 
     public void updateWeeklyForecast(JSONArray weeklyforecast){
         this.weeklyforecast = weeklyforecast;
-        if(adapter == null) {
-            adapter = new WeeklyItemsAdapter(this.weeklyforecast, context);
-            recyclerView.setAdapter(adapter);
+        if(recyclerView != null) {
+            if (adapter == null) {
+                adapter = new WeeklyItemsAdapter(this.weeklyforecast, ((MainActivity)context).weatherController);
+                recyclerView.setAdapter(adapter);
+            }
+            adapter.notifyDataSetChanged();
         }
-        adapter.notifyDataSetChanged();
     }
+
 }

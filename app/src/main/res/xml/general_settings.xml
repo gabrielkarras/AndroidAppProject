@@ -17,48 +17,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-    <SwitchPreferenceCompat
-        app:key="daily_notifications"
-        app:allowDividerAbove="true"
-        app:allowDividerBelow="true"
-        app:defaultValue="true"
-        app:disableDependentsState="true"
-        app:title="Enable Daily Recommendations"
-        app:summary="Get daily notifications at your rising time."
-        />
-    <SwitchPreferenceCompat
-        app:key="only_drastic"
-        app:allowDividerAbove="true"
-        app:allowDividerBelow="true"
-        app:defaultValue="false"
-        app:dependency="daily_notifications"
-        app:title="Only Drastic Changes"
-        app:summary="Get notifications only in case of alerts or drastic weather changes."/>
-
-    <SwitchPreferenceCompat
-        app:key="own_catalog_chosen"
-        app:defaultValue="false"
-        app:disableDependentsState="true"
-        app:allowDividerAbove="true"
-        app:allowDividerBelow="true"
-        app:title="Use personal Catalog"
-        app:summary="Get suggestions based on the clothes in your catalog."/>
-
-    <SwitchPreferenceCompat
-        app:key="allow_comfort_check"
-        app:allowDividerAbove="true"
-        app:defaultValue="true"
-        app:title="Allow comfort checks"
-        app:summary="Help us to help you by enabling rate-us notifications."/>
-
-    <SwitchPreferenceCompat
-        app:key="degrees_celsius"
-        app:allowDividerAbove="true"
-        app:defaultValue="true"
-        app:title="Use Celsius"
-        app:summary="Use degrees Celsius instead of Fahrenheit"/>
-
     <androidx.preference.EditTextPreference
         android:id="@+id/locationEditTextPref"
         android:defaultValue="Montreal"

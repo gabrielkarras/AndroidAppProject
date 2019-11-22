@@ -70,7 +70,7 @@ public class Controller{
     public View.OnClickListener weeklyforecast_bttn_click = new View.OnClickListener() {
         @Override
         public void onClick(View item) {
-            ((MainActivity)caller_activity).openWeeklyForecast();
+            ((MainActivity)caller_activity).toggleWeeklyForecast();
         }
     };
 
@@ -83,6 +83,7 @@ public class Controller{
     };
 
     public View.OnClickListener suggestion_toggler = new View.OnClickListener() {
+
         @Override
         public void onClick(View item) {
             ((MainActivity)caller_activity).closeMenu();

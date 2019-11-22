@@ -71,7 +71,6 @@ public class ForecastService extends IntentService {
         }
     }
 
-
     private void deliverResultToReceiver(int resultCode, JSONObject result) {
         Bundle bundle = new Bundle();
         if (result != null){
@@ -92,6 +91,7 @@ public class ForecastService extends IntentService {
         //Fetch Geocode coords
         try {
             foundGeoCoords = geocoder.getFromLocationName(city, 1).get(0);
+            city = foundGeoCoords.getFeatureName();
         } catch (IOException ioException) {
             Log.e("GEOCODER SERVICE","IO exception");
             ioException.printStackTrace();
@@ -101,11 +101,14 @@ public class ForecastService extends IntentService {
         } catch (NullPointerException nullPointer) {
             Log.e("GEOCODER SERVICE","Geocoder Returned Null.");
             nullPointer.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
         }
 
         if(foundGeoCoords == null){
             //TODO add current device GPS coords instead of hardcoded
             geoLocation =  "45.5036,-73.5527";
+            city = "Montreal";
         } else {
             geoLocation =  foundGeoCoords.getLatitude() + "," + foundGeoCoords.getLongitude();
         }
@@ -176,7 +179,10 @@ public class ForecastService extends IntentService {
                     tempDst.put("temperatureLow",tempSrc.getDouble("temperatureLow"));
                     tempDst.put("windSpeed",tempSrc.getDouble("windSpeed"));
                     tempDst.put("windGust",tempSrc.getDouble("windGust"));
-                    tempDst.put("precipType",tempSrc.getString("precipType"));
+                    if(tempSrc.has("precipType")) {
+                        tempDst.put("precipType", tempSrc.getString("precipType"));
+                        tempDst.put("precipProbability", tempSrc.getString("precipProbability"));
+                    }
                     tempDst.put("summary",tempSrc.getString("summary"));
 
 

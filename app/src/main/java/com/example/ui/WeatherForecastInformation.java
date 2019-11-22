@@ -34,6 +34,10 @@ public class WeatherForecastInformation {
     private String date;
     private String dayOfWeek;
 
+    public String precipitationType;
+    public String precipitationProbability;
+    public String summary;
+
     public WeatherForecastInformation.WeatherCondition getWeatherCondition() {
         return WeatherCondition;
     }
@@ -160,8 +164,7 @@ public class WeatherForecastInformation {
             IsGonnaSnow = false;
     }
 
-    public WeatherType getWeatherType()
-    {
+    public WeatherType getWeatherType() {
         double AvgTemp = (Maxtemp + Mintemp)/2;
 
         if (AvgTemp < 32)
@@ -178,7 +181,6 @@ public class WeatherForecastInformation {
         }
 
     }
-
 
     public Long getForecastTime() {
         return forecastTime;

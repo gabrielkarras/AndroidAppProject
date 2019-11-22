@@ -42,7 +42,6 @@ public class AppName extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         createNotificationChannel();
@@ -99,6 +98,7 @@ public class AppName extends Application {
             }
         }catch(Exception e){
             Log.e("JSONEXCEPTION","JSON CONVERSION LOADING EXCEPTION");
+            e.printStackTrace();
         }
 
     };

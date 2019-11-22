@@ -1,11 +1,13 @@
 package com.example.ui;
 
 import android.content.Context;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,7 +20,7 @@ import java.util.ArrayList;
 public class WeeklyItemsAdapter extends RecyclerView.Adapter<WeeklyItemsAdapter.dayViewHolder> {
 
     private JSONArray myDataset;
-    private Context context;
+    private WeatherController controller;
 
     public static class dayViewHolder extends RecyclerView.ViewHolder {
 
@@ -29,6 +31,7 @@ public class WeeklyItemsAdapter extends RecyclerView.Adapter<WeeklyItemsAdapter.
         public TextView felt_temperature;
         public TextView rain;
         public TextView snow;
+        public LinearLayout layout;
 
 
         public dayViewHolder(View itemView) {
@@ -41,12 +44,13 @@ public class WeeklyItemsAdapter extends RecyclerView.Adapter<WeeklyItemsAdapter.
             felt_temperature = itemView.findViewById(R.id.felt_temperature);
             rain = itemView.findViewById(R.id.rain);
             snow = itemView.findViewById(R.id.snow);
+            layout = itemView.findViewById(R.id.day_item_holder);
         }
     }
 
-    public WeeklyItemsAdapter(JSONArray myDataset, Context context) {
+    public WeeklyItemsAdapter(JSONArray myDataset, WeatherController controller) {
         this.myDataset = myDataset;
-        this.context = context;
+        this.controller = controller;
     }
 
     // Create new views (invoked by the layout manager)
@@ -66,23 +70,31 @@ public class WeeklyItemsAdapter extends RecyclerView.Adapter<WeeklyItemsAdapter.
         try {
             JSONObject temp = myDataset.getJSONObject(position);
 
-            holder.day_title.setText(temp.getString("day"));
+            holder.day_title.setText(temp.getString("weekday"));
             holder.dorecast_date.setText(temp.getString("date"));
             holder.forecast_summary.setText(temp.getString("summary"));
+            holder.forecast_summary.setMovementMethod(new ScrollingMovementMethod());
             holder.felt_temperature.setText(temp.getString("temperature"));
+            holder.forcast_icon.setImageResource(Integer.parseInt(temp.getString("iconID")));
 
-            holder.forcast_icon.setImageResource(R.drawable.wether_partly_cloudy);
+            final int pos = position;
+            holder.layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    controller.setCurrentDateTo(pos);
+                }
+            });
 
             if (temp.has("rain")) {
                 holder.rain.setText(temp.getString("rain"));
             } else {
-                holder.rain.setVisibility(View.INVISIBLE);
+                holder.rain.setVisibility(View.GONE);
             }
 
             if(temp.has("snow")) {
                 holder.snow.setText(temp.getString("snow"));
             } else {
-                holder.snow.setVisibility(View.INVISIBLE);
+                holder.snow.setVisibility(View.GONE);
             }
 
         } catch(Exception e){
@@ -94,4 +106,6 @@ public class WeeklyItemsAdapter extends RecyclerView.Adapter<WeeklyItemsAdapter.
     public int getItemCount() {
         return myDataset.length();
     }
+
 }
+

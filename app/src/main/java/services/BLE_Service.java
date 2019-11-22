@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
@@ -33,7 +35,7 @@ import static com.example.ui.AppName.TRACKER_NOTIFICATION_CHANNEL__ID;
 public class BLE_Service extends Service{
 
     BLEscanner temp;
-
+    Uri alarmSound;
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -59,9 +61,12 @@ public class BLE_Service extends Service{
         }
 
         registerReceiver(receiver, new IntentFilter("UPDATE_TRACKER_SERVICE"));
+        alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
     }
 
     public void startScan(ArrayList<TagObj> registeredTags) {
+
+        //TODO - APP DIES IF GIVEN NULL
         Log.e("DDDD", "STARTED !");
         List<String> tagAdressList = new ArrayList<>();
         for (TagObj tag: registeredTags) {
@@ -128,9 +133,10 @@ public class BLE_Service extends Service{
         // Those 2 allow to transition to the view on notification click!
         // Intent  notificationIntent = new Intent(this,MainActivity.class);
         // PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-
         Notification notification = new NotificationCompat.Builder(this,TRACKER_NOTIFICATION_CHANNEL__ID)
                 .setContentTitle(tagName+" is lost!")
+                .setSound(alarmSound)
+                .setOnlyAlertOnce(true)
                 .setContentText("The connection to your "+tagName+" tracker was lost.")
                 .setSmallIcon(R.drawable.ic_android_white_24dp)
                 .build();
@@ -141,6 +147,8 @@ public class BLE_Service extends Service{
 
         Notification notification = new NotificationCompat.Builder(this,TRACKER_NOTIFICATION_CHANNEL__ID)
                 .setContentTitle(tagName +" is nearby!")
+                .setSound(alarmSound)
+                .setOnlyAlertOnce(true)
                 .setContentText("The "+tagName+" tracker is near.")
                 .setSmallIcon(R.drawable.ic_android_white_24dp)
                 .build();

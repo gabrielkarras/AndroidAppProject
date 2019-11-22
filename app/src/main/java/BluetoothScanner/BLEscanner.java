@@ -1,6 +1,7 @@
 package BluetoothScanner;
 
 import android.Manifest;
+import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.ScanFilter;
@@ -50,11 +51,12 @@ public class BLEscanner {
                 }
                 scanning = true;
 
+                //TODO  the dialogs should be always originating from activities and not services. it is simply impossible to do from within service.
                 // Ensures Bluetooth is available on the device and it is enabled. If not,
                 // displays a dialog requesting user permission to enable Bluetooth.
                 if (BTadapter == null || !BTadapter.isEnabled()) {
-                    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                    ((AppCompatActivity) context).startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+                  //  Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                   // context.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
                 }
 
                 //TODO Check and Request Appropriate Permissions
