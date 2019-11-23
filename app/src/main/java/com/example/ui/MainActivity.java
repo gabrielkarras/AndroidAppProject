@@ -137,8 +137,7 @@ public class MainActivity extends AppCompatActivity {
         sugg3.setTag(R.id.fragment_suggeston_3);
         sugg3.setOnClickListener(controller.suggestion_toggler);
 
-        RelativeLayout backgrounImgOwner = findViewById(R.id.static_weather_holder);
-        backgrounImgOwner.setBackgroundResource(getBackgroundFromDate());
+       findViewById(R.id.static_weather_holder).setBackgroundResource(getBackgroundFromDate());
 
         //Notify user that the notifications for this app are off
         if (!notificationsEnabled){
@@ -178,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
             case 9:
             case 10:
             case 11:
-                return R.drawable.autumn;
+                return R.drawable.automn;
             default:
                 break;
         }

@@ -61,7 +61,6 @@ public class BLE_Service extends Service{
         }
 
         registerReceiver(receiver, new IntentFilter("UPDATE_TRACKER_SERVICE"));
-        alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
     }
 
     public void startScan(ArrayList<TagObj> registeredTags) {
@@ -135,8 +134,6 @@ public class BLE_Service extends Service{
         // PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
         Notification notification = new NotificationCompat.Builder(this,TRACKER_NOTIFICATION_CHANNEL__ID)
                 .setContentTitle(tagName+" is lost!")
-                .setSound(alarmSound)
-                .setOnlyAlertOnce(true)
                 .setContentText("The connection to your "+tagName+" tracker was lost.")
                 .setSmallIcon(R.drawable.ic_android_white_24dp)
                 .build();
@@ -147,8 +144,6 @@ public class BLE_Service extends Service{
 
         Notification notification = new NotificationCompat.Builder(this,TRACKER_NOTIFICATION_CHANNEL__ID)
                 .setContentTitle(tagName +" is nearby!")
-                .setSound(alarmSound)
-                .setOnlyAlertOnce(true)
                 .setContentText("The "+tagName+" tracker is near.")
                 .setSmallIcon(R.drawable.ic_android_white_24dp)
                 .build();

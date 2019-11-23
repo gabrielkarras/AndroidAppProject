@@ -196,8 +196,6 @@ public class WeatherController {
             populateWeeklyFragment();
             updateNonFragmentVisuals();
 
-            weather_status.setText(weatherForecast[day].getWeatherConditionPhrase());
-
         }
     }
 
@@ -259,6 +257,7 @@ public class WeatherController {
             windGustSpeed = convertToKm(weatherForecast[day].getWindGustSpeed()) + WindUnitMetric;
             critical_parameter3_desc.setText(((int)convertToKm(weatherForecast[day].getVisibility())) + DistanceUnitMetric);
         }
+        weather_status.setText(weatherForecast[day].getWeatherConditionPhrase());
 
         critical_parameter1_desc.setText(windSpeed);
         critical_parameter2_desc.setText(windGustSpeed);
