@@ -21,7 +21,6 @@ public class SuggestionExplanationOpen extends Fragment {
         super();
     }
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

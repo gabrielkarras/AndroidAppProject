@@ -90,8 +90,12 @@ public class BLEscanner {
 
         List<ScanFilter> filters = new ArrayList<>();
         for (String adress : devicesAdress) {
-            ScanFilter filter = new ScanFilter.Builder().setDeviceAddress(adress).build();
-            filters.add(filter);
+            try{
+                ScanFilter filter = new ScanFilter.Builder().setDeviceAddress(adress).build();
+                filters.add(filter);
+            } catch (java.lang.IllegalArgumentException e){
+                Log.e("adress error", adress);
+            }
         }
         ScanSettings settings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build();
         BTadapter.getBluetoothLeScanner().startScan(filters,settings,scanCallback);
