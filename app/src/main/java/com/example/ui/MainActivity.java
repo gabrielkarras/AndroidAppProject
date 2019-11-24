@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -78,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
     private AlertDialog notificationsDisabled;
     private ForecastResultReceiver resultReceiver;
     private TextView numberOfActiveTags;
+    private RelativeLayout background ;
 
     private String currentLocation = "Montreal";
     public int forecastDayOffset = 0;
@@ -131,8 +134,8 @@ public class MainActivity extends AppCompatActivity {
         Button sugg3 = findViewById(R.id.suggestion_bttn3);
         sugg3.setTag(R.id.fragment_suggeston_3);
         sugg3.setOnClickListener(controller.suggestion_toggler);
-
-       findViewById(R.id.static_weather_holder).setBackgroundResource(getBackgroundFromDate());
+        background = findViewById(R.id.static_weather_holder);
+        background.setBackgroundResource(getBackgroundFromDate());
 
         //Notify user that the notifications for this app are off
         if (!notificationsEnabled){
@@ -162,6 +165,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void setSuggestionExplanation(String explanation){
         openSuggestionFragment.updateTxt(explanation);
+    }
+
+    public void updateBackgroundImg(){
+        background.setBackgroundResource(getBackgroundFromDate());
     }
 
     private int getBackgroundFromDate(){

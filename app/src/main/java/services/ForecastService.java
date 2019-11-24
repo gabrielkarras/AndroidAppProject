@@ -113,7 +113,7 @@ public class ForecastService extends IntentService {
             city = "Montreal";
             northenHemisphere = true;
         } else {
-            northenHemisphere = ( foundGeoCoords.getLatitude() > 0) ? true : false;
+            northenHemisphere = (foundGeoCoords.getLatitude() > 0);
             geoLocation =  foundGeoCoords.getLatitude() + "," + foundGeoCoords.getLongitude();
         }
 

@@ -183,6 +183,7 @@ public class WeatherController {
             updateForecastDate();
             getWeatherInfoFromJSON(weeklyForecast.getJSONArray("data"));
             displayWeatherUI(((MainActivity)caller_activity).forecastDayOffset);
+            ((MainActivity)caller_activity).updateBackgroundImg();
         } catch(JSONException exc){
             exc.printStackTrace();
         }
