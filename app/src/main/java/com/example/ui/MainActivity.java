@@ -167,6 +167,28 @@ public class MainActivity extends AppCompatActivity {
     private int getBackgroundFromDate(){
 
         int month = Integer.parseInt(""+DateFormat.format("MM",new Date()));
+        if(weatherController!=null && !weatherController.isNorthenHemisphere){
+            switch(month){
+                case 12:
+                case 1:
+                case 2:
+                    return R.drawable.summer;
+                case 3:
+                case 4:
+                case 5:
+                    return R.drawable.automn;
+                case 6:
+                case 7:
+                case 8:
+                    return R.drawable.winter;
+                case 9:
+                case 10:
+                case 11:
+                    return R.drawable.spring;
+                default:
+                    break;
+            }
+        }
         switch(month){
             case 12:
             case 1:

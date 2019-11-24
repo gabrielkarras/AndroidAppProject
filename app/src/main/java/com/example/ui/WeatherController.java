@@ -60,6 +60,7 @@ public class WeatherController {
     private AppCompatActivity caller_activity;
     private Context context;
     public boolean displayFahrenheit = true;
+    public boolean isNorthenHemisphere = true;
     //private DecimalFormat df = new DecimalFormat("#.##");
 
     private GregorianCalendar localDate;
@@ -178,6 +179,7 @@ public class WeatherController {
         try {
             forecastTimeZone = weeklyForecast.getString("timezone");
             currentCityName = weeklyForecast.getString("request_City");
+            isNorthenHemisphere = weeklyForecast.getBoolean("isNorthHemisphere");
             updateForecastDate();
             getWeatherInfoFromJSON(weeklyForecast.getJSONArray("data"));
             displayWeatherUI(((MainActivity)caller_activity).forecastDayOffset);

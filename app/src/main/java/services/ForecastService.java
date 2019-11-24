@@ -32,6 +32,7 @@ public class ForecastService extends IntentService {
     private String city;
     private JSONObject cleanForecast;
     private ResultReceiver receiver;
+    private boolean northenHemisphere = true;
 
     public ForecastService(){
         super("Geocoder Service");
@@ -60,6 +61,7 @@ public class ForecastService extends IntentService {
             try{
                 cleanForecast.put("request_TimeMillis",System.currentTimeMillis());
                 cleanForecast.put("request_City",city);
+                cleanForecast.put("isNorthHemisphere",northenHemisphere);
                 deliverResultToReceiver(1,cleanForecast);
 
             } catch(JSONException exc){
@@ -109,7 +111,9 @@ public class ForecastService extends IntentService {
             //TODO add current device GPS coords instead of hardcoded
             geoLocation =  "45.5036,-73.5527";
             city = "Montreal";
+            northenHemisphere = true;
         } else {
+            northenHemisphere = ( foundGeoCoords.getLatitude() > 0) ? true : false;
             geoLocation =  foundGeoCoords.getLatitude() + "," + foundGeoCoords.getLongitude();
         }
 
