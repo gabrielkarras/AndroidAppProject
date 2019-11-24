@@ -22,6 +22,10 @@ import com.example.ui.WeatherController;
 
 import org.json.JSONObject;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
+
 public class DailyForecastFragment extends Fragment {
 
     private WeatherController controller;
@@ -98,8 +102,21 @@ public class DailyForecastFragment extends Fragment {
     public void setDataFields(String mainDegrees, String feltDegrees, int imageResourceId){
         mainTemperatureFahrenheit = mainDegrees;
         feltTemperatureFahrenheit = feltDegrees;
-        mainTemperatureCelsius = ""+convertToCelsius(Double.parseDouble(mainTemperatureFahrenheit.replace(WeatherController.Fahrenheit,"")))+WeatherController.Celcius;
-        feltTemperatureCelsius = ""+convertToCelsius(Double.parseDouble(feltTemperatureFahrenheit.replace(WeatherController.Fahrenheit,"")));
+
+        NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
+        double mainTemp = 10;
+        double feltTemp = 10;
+
+        try {
+            mainTemp = nf.parse(mainTemperatureFahrenheit.replace(WeatherController.Fahrenheit, "")).doubleValue();
+            feltTemp = nf.parse(feltTemperatureFahrenheit.replace(WeatherController.Fahrenheit, "")).doubleValue();
+        } catch(ParseException e){
+            e.printStackTrace();
+        }
+
+        mainTemperatureCelsius = convertToCelsius(mainTemp) + WeatherController.Celcius;
+        feltTemperatureCelsius = "" + convertToCelsius(feltTemp);
+
         iconId = imageResourceId;
         updateUI();
     }
