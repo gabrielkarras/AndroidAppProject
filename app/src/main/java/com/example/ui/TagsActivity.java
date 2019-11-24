@@ -64,7 +64,7 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
             registeredTags = new ArrayList<>();
         }else{
             if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
                 AppName.invokeTrackingService();
             }
         }
@@ -96,7 +96,7 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
     public boolean onCreateOptionsMenu(Menu menu) {
         menuInstance = menu;
         if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
         getMenuInflater().inflate(R.menu.tags_menu,menu);
 

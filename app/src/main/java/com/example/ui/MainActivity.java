@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("service","check");
                 AppName.invokeTrackingService();
             }else{
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
             }
         }
     }
