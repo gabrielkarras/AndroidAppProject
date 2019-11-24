@@ -56,6 +56,7 @@ public class AppName extends Application {
 
         serviceController = new ServiceController(this,registeredTags);
 
+        refreshScanMode(this);
         if(registeredTags != null && registeredTags.size() != 0){
             if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 AppName.invokeTrackingService();
@@ -67,6 +68,14 @@ public class AppName extends Application {
             notificationsEnabled = true;
         } else {
             notificationsEnabled = false;
+        }
+    }
+
+    public static void refreshScanMode(Context ctxt){
+        if(serviceController!= null && ctxt.getSharedPreferences(ctxt.getPackageName() + "_preferences", MODE_PRIVATE).getBoolean("continuousScan",false)){
+            serviceController.setModeContinuous(true);
+        } else if(serviceController!= null){
+            serviceController.setModeContinuous(false);
         }
     }
 

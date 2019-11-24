@@ -28,4 +28,13 @@
         app:allowDividerBelow="true"
         android:title="Current city: " />
 
+
+    <SwitchPreferenceCompat
+        app:key="continuousScan"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"
+        app:defaultValue="false"
+        app:title="Continuously Scan for Tags"
+        app:summary="If enabled the phone will look for saved tags, notifying you as soon as it out of range.\nIf disabled, will keep a notification until a tag has been moved."
+        />
 </PreferenceScreen>

@@ -65,6 +65,7 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
         }else{
             if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                AppName.refreshScanMode(getApplicationContext());
                 AppName.invokeTrackingService();
             }
         }
@@ -154,6 +155,7 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
             }while(changed);
 
             if(deleted_any){
+                AppName.refreshScanMode(getApplicationContext());
                 AppName.serviceController.updateAndRun(registeredTags);
                 AppName.saveTrackedTagsList();
             }

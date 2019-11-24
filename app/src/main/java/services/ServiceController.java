@@ -19,7 +19,7 @@ public class ServiceController {
     private Context context;
     private ArrayList<TagObj> trackingTagList;
     private boolean serviceStarted;
-
+    private boolean isContinuousScan;
 
     public ServiceController(Context context,ArrayList<TagObj> trackingTagList){
         this.context = context;
@@ -54,6 +54,7 @@ public class ServiceController {
             Intent serviceIntent = new Intent(context, BLE_Service.class);
             if (trackingTagList != null && trackingTagList.size() != 0) {
                 serviceIntent.putParcelableArrayListExtra("targetArrayList", trackingTagList);
+                serviceIntent.putExtra("continuous",isContinuousScan);
                 //Handles version checks
                 ContextCompat.startForegroundService(context, serviceIntent);
             }
@@ -67,5 +68,7 @@ public class ServiceController {
             context.stopService(serviceIntent);
         }
     }
-
+    public void setModeContinuous(boolean isContinuous){
+        isContinuousScan = isContinuous;
+    }
 }

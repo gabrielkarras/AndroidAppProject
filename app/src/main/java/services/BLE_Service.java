@@ -48,7 +48,7 @@ public class BLE_Service extends Service{
 
     private ArrayList<TagObj> targetList; //Supposed to be Tag list
     private ArrayList<TagObj> lostList; //Supposed to be Tag list
-
+    private boolean continuousScan = false;
 
     @Override
     public void onCreate() {
@@ -62,6 +62,11 @@ public class BLE_Service extends Service{
 
         registerReceiver(receiver, new IntentFilter("UPDATE_TRACKER_SERVICE"));
     }
+
+    public void setContinuousScan(boolean continuousScan){
+        this.continuousScan = continuousScan;
+    }
+
 
     public void startScan(ArrayList<TagObj> registeredTags) {
 
@@ -166,7 +171,7 @@ public class BLE_Service extends Service{
             // Get extra data included in the Intent
             String message = intent.getStringExtra("message");
             Log.d("receiver", "Got message: " + message);
-            if (message.contains("moving")){ // if moving message received stop service (cut notification)
+            if (message.contains("moving") && !continuousScan){ // if moving message received stop service (cut notification)
                 stopSelf();
             }
         }
