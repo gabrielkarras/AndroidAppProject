@@ -25,6 +25,8 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import javax.xml.parsers.FactoryConfigurationError;
+
 import fragments.DailyForecastFragment;
 
 public class WeatherController {
@@ -318,6 +320,11 @@ public class WeatherController {
 
     public void updateSystemUnits(){
         populateWeeklyFragment();
+        if(!displayFahrenheit) {
+            ((MainActivity) caller_activity).setSuggestionExplanation((int) convertToCelsius(weatherForecast[((MainActivity) caller_activity).forecastDayOffset].getAvgTemp()) + Celcius);
+        } else {
+            ((MainActivity) caller_activity).setSuggestionExplanation((int) weatherForecast[((MainActivity) caller_activity).forecastDayOffset].getAvgTemp() + Fahrenheit);
+        }
         updateNonFragmentVisuals();
     }
 

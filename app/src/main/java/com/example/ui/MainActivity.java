@@ -163,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
     public void setSuggestionExplanation(String explanation){
         openSuggestionFragment.updateTxt(explanation);
     }
+
     private int getBackgroundFromDate(){
 
         int month = Integer.parseInt(""+DateFormat.format("MM",new Date()));

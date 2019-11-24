@@ -33,5 +33,8 @@ public class SuggestionExplanationOpen extends Fragment {
 
     public void updateTxt(String explanation){
         explTxt = explanation;
+        if(explanataion != null){
+            explanataion.setText(explTxt);
+        }
     }
 }
