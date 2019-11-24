@@ -84,7 +84,6 @@ public class BLEscanner {
 
     public void launchScan(List<String> devicesAdress){
         scanCallback = new BLEscanCallback(context);
-        BTadapter.getBluetoothLeScanner().startScan(scanCallback);
 
         /// USE TO SCAN FOR TAGS WITH DEVICE ADDRESS "63:D0:31:71:81:BF" --- Should be used in the service
 

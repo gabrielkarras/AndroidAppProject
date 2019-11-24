@@ -37,7 +37,7 @@ public class ServiceController {
 
     public void updateAndRun(ArrayList<TagObj> newList){
         updateTrackingTagList(newList);
-        startService();
+        //startService();
     }
 
     private void sendTrackingServiceUpdateBroadcast(ArrayList<TagObj> tagList){

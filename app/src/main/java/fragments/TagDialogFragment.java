@@ -127,7 +127,7 @@ public class TagDialogFragment extends DialogFragment {
             return "Tag Address was not detected.";
         }
 
-        if(address.getText()!= null && !address.getText().equals("3C:71:BF:F1:E4:76")){
+        if(address.getText()!= null && !address.getText().toString().trim().equals("3C:71:BF:F1:E4:76")){
             return "The address does not correspond to a registered ClothingAdvisor device.";
         }
 

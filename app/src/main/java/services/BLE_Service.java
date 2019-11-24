@@ -68,12 +68,16 @@ public class BLE_Service extends Service{
         //TODO - APP DIES IF GIVEN NULL
         Log.e("DDDD", "STARTED !");
         List<String> tagAdressList = new ArrayList<>();
-        for (TagObj tag: registeredTags) {
-            tagAdressList.add(tag.getTagAddress());
+        if (registeredTags != null){
+            for (TagObj tag: registeredTags) {
+                tagAdressList.add(tag.getTagAddress());
+            }
+            //temp.startScan(Arrays.asList("3C:71:BF:F1:E4:76"));
+            temp.startScan(tagAdressList);
+            //3C:71:BF:F1:E4:76
+        }else {
+            stopSelf();
         }
-        //temp.startScan(Arrays.asList("3C:71:BF:F1:E4:76"));
-        temp.startScan(tagAdressList);
-        //3C:71:BF:F1:E4:76
     }
 
     public void stopScan() {
@@ -89,7 +93,12 @@ public class BLE_Service extends Service{
 
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
-        targetList = intent.getParcelableArrayListExtra("targetArrayList");
+        try {
+            targetList = intent.getParcelableArrayListExtra("targetArrayList");
+        }catch (java.lang.NullPointerException e){
+            Log.e("Service error", "No tag received");
+            stopSelf();
+        }
 
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             Toast.makeText(this, "BLE not supported!", Toast.LENGTH_SHORT).show();
