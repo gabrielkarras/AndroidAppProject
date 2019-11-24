@@ -56,9 +56,9 @@ public class BLE_Service extends Service{
 
         /* If the current version is Oreo +, need to show a mandatory notification so the process
          wont get killed.*/
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        //if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startMandatoryNotification();
-        }
+        //}
 
         registerReceiver(receiver, new IntentFilter("UPDATE_TRACKER_SERVICE"));
     }
