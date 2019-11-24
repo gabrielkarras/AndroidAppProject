@@ -1,6 +1,7 @@
 package com.example.ui;
 
 import android.content.Context;
+import android.nfc.FormatException;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,9 +17,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import fragments.DailyForecastFragment;
@@ -54,7 +58,7 @@ public class WeatherController {
     private AppCompatActivity caller_activity;
     private Context context;
     public boolean displayFahrenheit = true;
-    private DecimalFormat df = new DecimalFormat("#.##");
+    //private DecimalFormat df = new DecimalFormat("#.##");
 
     private GregorianCalendar localDate;
     private String forecastTimeZone;
@@ -234,12 +238,14 @@ public class WeatherController {
     }
 
     private void populateDailyFragment(int dailyWeatherIconDrawableID, int day){
+        NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
+        String mainTemp = "";
+        String feltTemp = "";
 
+        mainTemp = nf.format(weatherForecast[day].getDecimalAvgTemp());
+        feltTemp = nf.format(weatherForecast[day].getAvgTemp());
 
-        String mainTemp = df.format(weatherForecast[day].getDecimalAvgTemp()) + Fahrenheit;
-        String feltTemp = df.format(weatherForecast[day].getAvgTemp());
-
-        ((MainActivity)caller_activity).dailyForecastFragment.setDataFields(mainTemp,feltTemp,dailyWeatherIconDrawableID);
+        ((MainActivity)caller_activity).dailyForecastFragment.setDataFields(mainTemp+ Fahrenheit,feltTemp,dailyWeatherIconDrawableID);
     }
 
     private void updateNonFragmentVisuals(){
