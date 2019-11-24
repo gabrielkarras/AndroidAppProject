@@ -1,5 +1,6 @@
 package com.example.ui;
 
+import android.Manifest;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -7,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
 
@@ -53,6 +55,12 @@ public class AppName extends Application {
         loadTrackedTagList();
 
         serviceController = new ServiceController(this,registeredTags);
+
+        if(registeredTags != null && registeredTags.size() != 0){
+            if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                AppName.invokeTrackingService();
+            }
+        }
 
         //If notifications enabled schedule next notification alarm
         if (NotificationManagerCompat.from(this).areNotificationsEnabled()){

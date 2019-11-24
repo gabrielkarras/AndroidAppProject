@@ -33,8 +33,7 @@ public class TagDialogFragment extends DialogFragment {
 
     private DataLinker dataLinker;
     private EditText name;
-    private TextView address;
-    private TextView discover_link;
+    private EditText address;
 
     private String selectedDevice;
 
@@ -57,16 +56,7 @@ public class TagDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.tag_settings_dialog,container,false);
 
         name = ((EditText)view.findViewById(R.id.tag_name_field));
-        address = ((TextView)view.findViewById(R.id.tag_address_value));
-        discover_link = ((TextView)view.findViewById(R.id.ble_discovery_link));
-
-        discover_link.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent devicePicker = new Intent(view.getContext(), BLE_SelectorActivity.class);
-                startActivityForResult(devicePicker, 1);
-            }
-        });
+        address = ((EditText)view.findViewById(R.id.tag_address_value));
 
         Button cancel = ((Button)view.findViewById(R.id.tag_cancel));
         cancel.setTag(this);
@@ -85,13 +75,11 @@ public class TagDialogFragment extends DialogFragment {
             name.setText(passedData.getName());
             originalName = passedData.getName();
             address.setText(passedData.getTagAddress());
-            discover_link.setVisibility(View.INVISIBLE);
         }
 
         //If no data passed, enter tag creation mode and start scanning for closest bluetooth
         else {
             createNew = true;
-            discover_link.setVisibility(View.VISIBLE);
             address.setText("");
         }
 

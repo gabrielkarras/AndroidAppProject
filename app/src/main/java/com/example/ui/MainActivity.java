@@ -73,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean explanation3_visible;
     public boolean weeklyForecastVisible;
 
+    private AppName appName;
+
     private AlertDialog notificationsDisabled;
     private ForecastResultReceiver resultReceiver;
     private TextView numberOfActiveTags;
@@ -105,13 +107,6 @@ public class MainActivity extends AppCompatActivity {
         controller = new Controller(getApplicationContext(),this);
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
-
-        if(registeredTags != null || registeredTags.size() != 0){
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                AppName.invokeTrackingService();
-            }
-        }
 
         openMenuFragment = new MainMenuFragmentOpen(controller);
         closedMenuFragment = new MainMenuFragmentClosed(controller);
@@ -154,7 +149,17 @@ public class MainActivity extends AppCompatActivity {
 
         openDailyForecast();
         closeMenu();
+
+        if(registeredTags != null){
+            if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                Log.e("service","check");
+                AppName.invokeTrackingService();
+            }else{
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            }
+        }
     }
+
     public void setSuggestionExplanation(String explanation){
         openSuggestionFragment.updateTxt(explanation);
     }

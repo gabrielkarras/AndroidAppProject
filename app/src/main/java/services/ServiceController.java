@@ -47,7 +47,6 @@ public class ServiceController {
         context.sendBroadcast(intent);
     }
 
-
     public void startService(){
         if(!serviceStarted) {
             serviceStarted = true;
@@ -55,12 +54,10 @@ public class ServiceController {
             Intent serviceIntent = new Intent(context, BLE_Service.class);
             if (trackingTagList != null && trackingTagList.size() != 0) {
                 serviceIntent.putParcelableArrayListExtra("targetArrayList", trackingTagList);
+                //Handles version checks
+                ContextCompat.startForegroundService(context, serviceIntent);
             }
-
-            //Handles version checks
-            ContextCompat.startForegroundService(context, serviceIntent);
         }
-
     }
 
     public void stopService(){

@@ -65,6 +65,7 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
         }else{
             if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                AppName.invokeTrackingService();
             }
         }
 
@@ -84,7 +85,6 @@ public class TagsActivity extends AppCompatActivity implements DataLinker {
             fragmentTransaction.commit();
 
         } else {
-
             // specify an adapter
             mAdapter = new TagsRecyclerAdapter(registeredTags, getApplicationContext(), controller);
             recyclerView.setAdapter(mAdapter);

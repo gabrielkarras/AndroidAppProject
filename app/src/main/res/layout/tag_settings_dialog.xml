@@ -9,18 +9,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="3" />
 
-    <TextView
-        android:id="@+id/ble_discovery_link"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_weight="2"
-        android:text="Discover Devices"
-        android:textAppearance="@style/Widget.AppCompat.Spinner.Underlined"
-        android:textColor="@color/blue_headings"
-        android:textSize="12sp"
-        android:textStyle="normal|italic" />
-
     <LinearLayout
         android:id="@+id/tag_action_box"
         android:layout_width="match_parent"

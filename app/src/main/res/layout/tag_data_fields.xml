@@ -43,13 +43,11 @@
                 android:layout_height="wrap_content"
                 android:text="Tag Address:" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tag_address_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:layout_marginLeft="5dp"
-                android:enabled="false"
                 android:inputType="textPersonName"
                 android:text="" />
         </LinearLayout>

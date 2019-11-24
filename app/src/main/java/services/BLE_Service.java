@@ -71,6 +71,7 @@ public class BLE_Service extends Service{
         for (TagObj tag: registeredTags) {
             tagAdressList.add(tag.getTagAddress());
         }
+        //temp.startScan(Arrays.asList("3C:71:BF:F1:E4:76"));
         temp.startScan(tagAdressList);
         //3C:71:BF:F1:E4:76
     }
