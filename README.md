@@ -7,12 +7,6 @@ Ion Balan
 Gabriel Karras
 
 
-Louis Traon
-
-
-Khoi Nguyen
-
-
 # COEN/ELEC-390 Team Project: 
 An android platform application
 
@@ -31,3 +25,4 @@ An android platform application
 3. Within Android Studio, you can open the project file
 4. You can run an emulator
 5. Otherwise, you will need to have developper mode enabled on an android phone and allow Android Studio to install it
+
