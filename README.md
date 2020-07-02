@@ -1,12 +1,3 @@
-Authors:
-
-
-Ion Balan
-
-
-Gabriel Karras
-
-
 # COEN/ELEC-390 Team Project: 
 An android platform application
 
